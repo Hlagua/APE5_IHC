@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Suite de Pruebas Automatizadas · APE 5 (Fase 1)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; background: #f9fafb; color: #111827; }
+    h1 { margin-bottom: 0.5rem; }
+    .meta { color: #6b7280; margin-bottom: 1.5rem; }
+    .summary { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+    .card { background: white; padding: 1rem 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb; }
+    .card .val { font-size: 1.75rem; font-weight: 700; }
+    .card.pass .val { color: #16a34a; }
+    .card.fail .val { color: #dc2626; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    th { background: #f3f4f6; font-size: 0.875rem; }
+    .badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
+    .badge-pass { background: #dcfce7; color: #15803d; }
+    .badge-fail { background: #fee2e2; color: #b91c1c; }
+    iframe { width: 360px; height: 400px; border: 2px solid #94a3b8; border-radius: 6px; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Suite de Pruebas de Usabilidad y A11y · APE 5 (Fase 1)</h1>
+  <p class="meta">Responsable: <strong>Carlos Giovanni Ramos Jácome</strong> (Tester) · Quinto "A" IHC</p>
+
+  <div class="summary">
+    <div class="card"><div class="val" id="total-tests">0</div><div>Total Pruebas</div></div>
+    <div class="card pass"><div class="val" id="pass-tests">0</div><div>Aprobadas</div></div>
+    <div class="card fail"><div class="val" id="fail-tests">0</div><div>Fallidas</div></div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Descripción de la Prueba</th>
+        <th>Criterio Evaluado</th>
+        <th>Resultado</th>
+      </tr>
+    </thead>
+    <tbody id="test-rows"></tbody>
+  </table>
+
+  <h2>Sandbox de Validación en Móvil (360 px)</h2>
+  <iframe id="test-frame" src="../src/index.html"></iframe>
+
+  <script>
+    const frame = document.getElementById('test-frame');
+    const rows = document.getElementById('test-rows');
+
+    frame.onload = () => {
+      const doc = frame.contentDocument;
+      const win = frame.contentWindow;
+
+      const tests = [
+        {
+          id: 'TC-01',
+          desc: 'Estructura semántica HTML5 (header, main, article, dl, section)',
+          run: () => {
+            return doc.querySelector('header') &&
+                   doc.querySelector('main') &&
+                   doc.querySelector('article.tarjeta') &&
+                   doc.querySelector('dl.datos') &&
+                   doc.querySelector('section.resumen');
+          }
+        },
+        {
+          id: 'TC-02',
+          desc: 'Región accesible de estado role="status"',
+          run: () => {
+            const p = doc.getElementById('estado');
+            return p && p.getAttribute('role') === 'status';
+          }
+        },
+        {
+          id: 'TC-03',
+          desc: 'Botones nativos con tipo type="button"',
+          run: () => {
+            const b1 = doc.getElementById('btn-reservar');
+            const b2 = doc.getElementById('btn-cancelar');
+            return b1 && b1.type === 'button' && b2 && b2.type === 'button';
+          }
+        },
+        {
+          id: 'TC-04',
+          desc: 'Sin scroll horizontal a 360 px de ancho',
+          run: () => {
+            return doc.body.scrollWidth <= 365;
+          }
+        },
+        {
+          id: 'TC-05',
+          desc: 'Transición a estado confirmada al hacer clic en reservar',
+          run: () => {
+            const b1 = doc.getElementById('btn-reservar');
+            const b2 = doc.getElementById('btn-cancelar');
+            const cupos = doc.getElementById('cupos');
+            const inicial = Number(cupos.textContent);
+            b1.click();
+            const resumen = doc.querySelector('.resumen');
+            return resumen.dataset.estado === 'confirmada' &&
+                   b1.disabled === true &&
+                   !b2.hidden &&
+                   Number(cupos.textContent) === inicial - 1;
+          }
+        },
+        {
+          id: 'TC-06',
+          desc: 'Gestión de foco: el foco se traslada al botón de cancelar al confirmar',
+          run: () => {
+            const b2 = doc.getElementById('btn-cancelar');
+            return doc.activeElement === b2;
+          }
+        },
+        {
+          id: 'TC-07',
+          desc: 'Transición a cancelada y restitución de cupo al cancelar',
+          run: () => {
+            const b1 = doc.getElementById('btn-reservar');
+            const b2 = doc.getElementById('btn-cancelar');
+            const cupos = doc.getElementById('cupos');
+            b2.click();
+            const resumen = doc.querySelector('.resumen');
+            return resumen.dataset.estado === 'cancelada' &&
+                   b1.disabled === false &&
+                   b2.hidden === true &&
+                   Number(cupos.textContent) === 12;
+          }
+        },
+        {
+          id: 'TC-08',
+          desc: 'Gestión de foco: el foco regresa a reservar al cancelar',
+          run: () => {
+            const b1 = doc.getElementById('btn-reservar');
+            return doc.activeElement === b1;
+          }
+        }
+      ];
+
+      let passed = 0;
+      let failed = 0;
+
+      tests.forEach(t => {
+        let ok = false;
+        try {
+          ok = !!t.run();
+        } catch (e) {
+          console.error(e);
+          ok = false;
+        }
+
+        if (ok) passed++; else failed++;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${t.id}</strong></td>
+          <td>${t.desc}</td>
+          <td>WCAG 2.1 / Guía Práctica APE 5</td>
+          <td><span class="badge ${ok ? 'badge-pass' : 'badge-fail'}">${ok ? 'PASÓ' : 'FALLÓ'}</span></td>
+        `;
+        rows.appendChild(tr);
+      });
+
+      document.getElementById('total-tests').textContent = tests.length;
+      document.getElementById('pass-tests').textContent = passed;
+      document.getElementById('fail-tests').textContent = failed;
+    };
+  </script>
+</body>
+</html>
