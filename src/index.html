@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aula Abierta · Talleres</title>
+  <link rel="stylesheet" href="estilos.css">
+  <script src="api.js" defer></script>
+  <script src="reserva.js" defer></script>
+</head>
+<body>
+  <header class="cabecera">
+    <p class="marca">Aula Abierta</p>
+  </header>
+
+  <main class="contenido">
+    <h1>Elige tu taller</h1>
+
+    <div class="disposicion">
+      <!-- Componente 1: tarjeta del taller (datos + acción) -->
+      <article class="tarjeta" aria-labelledby="titulo-taller">
+        <h2 id="titulo-taller">Interfaces web accesibles</h2>
+        <dl class="datos">
+          <div>
+            <dt>Horario</dt>
+            <dd>Jueves, 14:00 a 16:00</dd>
+          </div>
+          <div>
+            <dt>Lugar</dt>
+            <dd>Laboratorio 2</dd>
+          </div>
+          <div>
+            <dt>Cupos</dt>
+            <dd><span id="cupos">12</span> disponibles</dd>
+          </div>
+        </dl>
+        <button type="button" id="btn-reservar" class="boton boton--primario">
+          Reservar un lugar
+        </button>
+      </article>
+
+      <!-- Componente 2: resumen de la reserva (estado + cancelación) -->
+      <section class="resumen" aria-labelledby="titulo-resumen" data-estado="disponible">
+        <h2 id="titulo-resumen">Mi reserva</h2>
+        <p id="estado" role="status" aria-live="polite">Aún no tienes una reserva.</p>
+        <button type="button" id="btn-cancelar" class="boton boton--secundario" hidden>
+          Cancelar mi reserva
+        </button>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
