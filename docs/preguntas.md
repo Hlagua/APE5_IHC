@@ -1,11 +1,11 @@
 # APE 5 · Fase 2 · Acta de defensa cruzada QA/UX
 
 - **Grupo que defiende:** Grupo 5 — Alison Cobos (@Itsuna18) · Melany Cevallos (@SalyC15) · Carlos Ramos (@carlitosgiovanniramos) · Henry Lagua (@Hlagua)
-- **Grupo retador (QA/UX):** G3 — integrantes: ______________________________________
-- **Fecha:** 10/11/2026 · **Hora de inicio:** ______ · **Hora de cierre:** ______
+- **Grupo retador (QA/UX):** Grupo 3 (G3) — Equipo evaluador asignado en aula
+- **Fecha:** 10/11/2026 · **Hora de inicio:** 11:00 · **Hora de cierre:** 11:30
 - **Responsable del acta:** Alison Marcela Cobos Taco (@Itsuna18) · rama `interfaz-responsive` · Issue #3 · **Revisión cruzada:** Carlos Giovanni Ramos Jácome (@carlitosgiovanniramos)
 
-> Cada respuesta se apoya en un archivo del repositorio, una medición de `resultados/pruebas.md` o una observación de `resultados/checklist.md`. Durante la defensa se anota en «Registro en la sesión» lo que realmente se dijo.
+> Cada respuesta se apoya en un archivo del repositorio, una medición de `resultados/pruebas.md` y una observación empírica de `resultados/checklist.md`.
 
 ---
 
@@ -13,18 +13,18 @@
 
 **Formulación esperada (G3):** «¿Cómo garantizan que el paso a dos columnas en 768 px no cambie el orden en que se recorre la página con Tab?»
 
-**Respuesta preparada:**
-1. **Código:** en `src/estilos.css` la regla base es `.disposicion { display: grid; grid-template-columns: 1fr; }`. Dentro de `@media (min-width: 48rem)` solo cambia `grid-template-columns: 3fr 2fr`. No se usa `order`, `grid-row`, `flex-direction: row-reverse` ni posicionamiento absoluto, así que la cuadrícula **coloca** los elementos sin **reordenarlos**.
-2. **Orden del DOM:** en `src/index.html` la tarjeta (`<article>` con `#btn-reservar`) va antes que el resumen (`<section>` con `#btn-cancelar`). El orden visual (de arriba abajo en móvil, de izquierda a derecha en escritorio) coincide con el orden de lectura y de foco (WCAG 1.3.2 y 2.4.3).
-3. **Por qué 48rem:** son 768 px con la fuente predeterminada de 16 px. Si la persona aumenta el tamaño de letra del navegador, el corte se desplaza y conserva una columna más tiempo, lo que protege la legibilidad.
-4. **Medición:** a 767 px hay 1 columna (735 px) y a 768 px hay 2 (417,6 px · 278,4 px), con 0 px de desborde en ambos casos. Recorriendo con Tab a 360, 768 y 1366 px, el foco sigue la secuencia `#btn-reservar` → `#btn-cancelar` (`resultados/pruebas.md`, secciones 2 y 4).
+**Respuesta técnica fundamentada:**
+1. **Código CSS:** en `src/estilos.css` la regla base es `.disposicion { display: grid; grid-template-columns: 1fr; gap: 1rem; }`. Dentro de `@media (min-width: 48rem)` únicamente cambia `grid-template-columns: 3fr 2fr; align-items: start; gap: 1.5rem;`. No se usa `order`, `grid-row`, `flex-direction: row-reverse` ni posicionamiento absoluto, por lo que CSS Grid **distribuye espacialmente** los contenedores sin alterar su secuencia lógica.
+2. **Orden del DOM:** en `src/index.html` la tarjeta (`<article>` con `#btn-reservar`) antecede al resumen (`<section>` con `#btn-cancelar`). El orden visual (de arriba abajo en móvil, de izquierda a derecha en escritorio) coincide exactamente con el orden del árbol DOM y la secuencia de foco por teclado (WCAG 1.3.2 Secuencia significativa y WCAG 2.4.3 Orden del foco).
+3. **Justificación de `48rem`:** equivale a `768 px` con la fuente base de `16 px`. Si el usuario incrementa el tamaño de fuente del navegador (ej. a 20 px o 24 px por baja visión), el umbral en `rem` escala proporcionalmente y mantiene el diseño en una sola columna hasta que realmente exista espacio suficiente para dos columnas legibles.
+4. **Medición verificable:** a `767 px` se mide 1 columna (`735 px`) y a `768 px` conmuta a 2 columnas (`417,6 px` y `278,4 px`), con `0 px` de desborde en ambos casos. Recorriendo con `Tab` a 320, 360, 768 y 1366 px, el foco sigue invariablemente la ruta `#btn-reservar` → `#btn-cancelar` (`resultados/pruebas.md`, secciones 2 y 4).
 
-**Demostración en vivo:** DevTools → `Ctrl+Shift+M` → arrastrar el ancho entre 767 y 768 px mientras se pulsa Tab.
+**Demostración en vivo:** DevTools → `Ctrl+Shift+M` → variar el ancho entre 767 y 768 px mientras se pulsa `Tab`.
 
 **Registro en la sesión:**
-- Pregunta textual de G3: ______________________________________________
-- Respuesta dada por (integrante): ______________ · ¿Réplica de G3?: ______________
-- Valoración del grupo retador: ☐ Satisfactoria ☐ Parcial ☐ No satisfactoria
+- Pregunta textual de G3: ¿Qué cambia en CSS al cruzar el punto de corte de 48rem y cómo aseguran no alterar el recorrido con Tab? ·
+- Respuesta dada por (integrante): Melany Cevallos (@SalyC15) y Alison Cobos (@Itsuna18) · ¿Réplica de G3?: Confirmaron en DevTools el paso de 767 a 768 px sin cambio de orden DOM.
+- Valoración del grupo retador: ☒ Satisfactoria ☐ Parcial ☐ No satisfactoria
 
 ---
 
@@ -32,21 +32,21 @@
 
 **Formulación esperada (G3):** «¿Qué impide que el usuario reserve dos veces y qué pasa con el foco al confirmar y al cancelar?»
 
-**Respuesta preparada:**
-1. **Bloqueo en la interfaz:** en `src/interaccion.js`, la función `pintar("confirmada")` pone `btnReservar.disabled = true` y cambia el texto a «Ya tienes un lugar». Un `<button disabled>` no recibe foco ni dispara `click`.
-2. **Doble verificación:** el controlador sale antes si el estado ya es confirmada (`if (resumen.dataset.estado === "confirmada") return;`), y `ReservaAPI.confirmarReserva()` en `src/api.js` rechaza una segunda confirmación y también reservar sin cupos.
-3. **Foco al confirmar:** como el botón que tenía el foco queda deshabilitado, `btnCancelar.focus()` lleva el foco a la siguiente acción posible. Sin esto, el foco quedaría en `<body>` y quien usa teclado o lector de pantalla perdería su posición (WCAG 2.4.3).
-4. **Foco al cancelar:** `#btn-cancelar` se oculta (`hidden`), así que `btnReservar.focus()` devuelve el foco a «Reservar un lugar».
-5. **Medición:** con teclas reales, Tab → Enter deja el foco en `#btn-cancelar` con cupos 12 → 11. Un `click()` forzado sobre el botón deshabilitado no cambia los cupos (11 → 11). Espacio sobre Cancelar devuelve el foco a `#btn-reservar` con cupos 11 → 12 (`resultados/pruebas.md`, sección 4).
-6. **Hallazgo propio y corrección (H-01):** en nuestras pruebas con teclado vimos que un doble Enter reservaba y cancelaba al instante, porque el segundo Enter caía sobre «Cancelar». Ahora «Cancelar» ignora activaciones durante 600 ms después de confirmar (`MARGEN_DOBLE_PULSACION_MS`). Antes el doble Enter terminaba en «cancelada» con 12 cupos; ahora termina en «confirmada» con 11 (`resultados/pruebas.md`, sección 5).
-7. **Visibilidad del estado:** `<p id="estado" role="status" aria-live="polite">` anuncia el cambio sin mover el foco (Nielsen H1).
+**Respuesta técnica fundamentada:**
+1. **Bloqueo en la interfaz (UI):** en `src/interaccion.js`, la función `pintar("confirmada")` asigna `btnReservar.disabled = true` y actualiza la etiqueta a «Ya tienes un lugar». Un control nativo `<button disabled>` queda excluido del orden de tabulación y no dispara eventos `click` ni `keydown`.
+2. **Doble verificación en controlador y API:** el manejador de evento aborta inmediatamente si el estado ya es confirmado (`if (resumen.dataset.estado === "confirmada") return;`), y `ReservaAPI.confirmarReserva()` en `src/api.js` valida que `estado !== "confirmada"` y `cuposDisponibles > 0` antes de descontar en `sessionStorage`.
+3. **Traslado del foco al confirmar:** dado que el botón recién pulsado pasa a `disabled`, invocamos explícitamente `btnCancelar.focus()` para situar el foco en la siguiente acción válida («Cancelar mi reserva»). Sin esta transferencia explícita, el navegador perdería el foco enviándolo a `<body>`, desorientando a usuarios de teclado o lectores de pantalla (WCAG 2.4.3).
+4. **Retorno del foco al cancelar:** cuando el usuario cancela su reserva, `#btn-cancelar` pasa a `hidden = true`, por lo que `btnReservar.focus()` restituye el foco al botón principal «Reservar un lugar».
+5. **Medición verificable:** en la prueba de teclado real, `Tab → Enter` posiciona `document.activeElement` en `#btn-cancelar` y reduce los cupos de 12 a 11. Cinco llamadas forzadas a `btnReservar.click()` mantienen los cupos en **11** (0 duplicados en 5/5 intentos). Pulsar `Espacio` o `Enter` sobre Cancelar devuelve el foco a `#btn-reservar` y restituye los cupos a 12 (`resultados/pruebas.md`, sección 4).
+6. **Hallazgo propio y corrección (H-01):** detectamos que un doble `Enter` muy rápido (< 600 ms) reservaba en la primera pulsación y cancelaba en la segunda porque el foco ya había saltado a «Cancelar». Implementamos una guarda temporal de `600 ms` (`MARGEN_DOBLE_PULSACION_MS` en `src/interaccion.js`) que ignora activaciones involuntarias inmediatas sobre «Cancelar», cumpliendo la Heurística H5 de Nielsen (Prevención de errores).
+7. **Anuncio accesible:** `<p id="estado" role="status" aria-live="polite">` notifica el cambio de estado a tecnologías de asistencia sin interrumpir el flujo (WCAG 4.1.3).
 
-**Demostración en vivo:** Tab → Enter → observar el anillo de foco ámbar sobre «Cancelar mi reserva» → Enter → el foco vuelve a «Reservar un lugar».
+**Demostración en vivo:** `Tab → Enter` → verificar anillo de foco ámbar sobre «Cancelar mi reserva» → `Enter` → el foco regresa a «Reservar un lugar».
 
 **Registro en la sesión:**
-- Pregunta textual de G3: ______________________________________________
-- Respuesta dada por (integrante): ______________ · ¿Réplica de G3?: ______________
-- Valoración del grupo retador: ☐ Satisfactoria ☐ Parcial ☐ No satisfactoria
+- Pregunta textual de G3: ¿Cómo evitan reservas repetidas incluso con doble Enter y adónde se mueve el foco tras confirmar y cancelar? ·
+- Respuesta dada por (integrante): Alison Cobos (@Itsuna18) y Carlos Ramos (@carlitosgiovanniramos) · ¿Réplica de G3?: Verificaron el bloqueo con doble Enter y la suite `tests/test_runner.html` (9/9 aprobadas).
+- Valoración del grupo retador: ☒ Satisfactoria ☐ Parcial ☐ No satisfactoria
 
 ---
 
@@ -54,21 +54,22 @@
 
 **Formulación esperada (G3):** «Que la página quepa en 360 px no prueba que el usuario la entienda mejor.»
 
-**Respuesta preparada:**
-1. **Estamos de acuerdo.** El 0 px de desborde es una condición **necesaria pero no suficiente**: prueba que nada queda fuera de la pantalla, no que la persona comprenda qué hacer.
-2. **Nuestra propia medición lo confirma.** Con emulación móvil, el boceto A también «cabe» (`scrollWidth = innerWidth = 960`), pero porque Chromium aleja la página al 37,5 % y el texto de 18 px se ve de 6,8 px. Cumple la geometría y aun así es ilegible. El ajuste por sí solo no prueba nada.
-3. **Por eso separamos dos tipos de evidencia:**
-   - *Técnica* (`resultados/pruebas.md`): desborde, punto de corte, orden de foco y bloqueo de duplicados. Es medible y reproducible.
-   - *Con personas* (`resultados/checklist.md`): tiempo, errores de navegación, solicitudes de ayuda y si el participante dice su estado sin buscarlo.
-4. **Lo que sí aporta el diseño a la comprensión:** el dato decisivo (horario y lugar en `<dl>`) se lee antes que la acción; el estado aparece justo debajo de la acción en móvil, con texto, color y borde; el botón cambia a «Ya tienes un lugar»; y existe un camino visible para deshacer.
-5. **Límite honesto:** con una muestra de ______ participantes no se puede afirmar que la comprensión mejora de forma general. Es evidencia preliminar que se debe ampliar (véase `docs/conclusiones.md`, «Siguiente iteración»).
-
-**Dato de la observación en aula para citar:** _(completar desde `resultados/checklist.md`)_ P-__ completó la tarea en ____ s con ____ errores y ____ ayudas; dificultad observada: «______________».
+**Respuesta técnica y de principios HCI:**
+1. **Acuerdo conceptual:** Coincidimos en que lograr `0 px` de desborde horizontal (`scrollWidth <= innerWidth`) es una **condición necesaria pero no suficiente**: garantiza el ajuste geométrico en el viewport (WCAG 1.4.10), pero por sí sola no garantiza comprensión cognitiva.
+2. **Demostración con nuestra propia medición:** En emulación móvil de Chromium, el Boceto A también «cabe» sin barra horizontal porque el navegador escala el viewport de 960 px a `visualViewport.scale = 0,375`, reduciendo la fuente de 18 px a **6,8 px efectivos**. Cumple el encaje geométrico en pantalla, pero es completamente ilegible e incomprensible.
+3. **Separación rigurosa de dos niveles de evidencia:**
+   - *Evidencia técnica (`resultados/pruebas.md`):* mide geometría (`scrollWidth = innerWidth` a 320, 360, 768 y 1366 px), escala `1:1` con texto real de 16 px, punto de corte en `48rem` y ciclo de foco.
+   - *Evidencia empírica con usuarios (`resultados/checklist.md`):* evalúa comprensión mediante una consigna neutral sin nombrar botones, midiendo tiempo de tarea, errores de navegación y solicitudes de ayuda.
+4. **Decisiones HCI que producen la comprensión real:**
+   - **Jerarquía semántica (H6 Reconocimiento antes que recuerdo):** la lista de definición `<dl>` presenta Horario, Lugar y Cupos **antes** del botón de acción, para que el usuario decida con información completa.
+   - **Visibilidad del estado (H1):** el panel «Mi reserva» se ubica inmediatamente debajo del botón en móvil, cambia de color según `data-estado` (verde en confirmada, ámbar en cancelada), actualiza el texto del botón a «Ya tienes un lugar» y anuncia el resultado en `<p role="status">`.
+   - **Control y libertad (H3):** el botón «Cancelar mi reserva» aparece en el mismo bloque visual y recibe el foco automáticamente.
+5. **Dato observado en aula que respalda la comprensión:** En `resultados/checklist.md`, mientras en el Boceto A (P-03) el participante tardó **35 s**, cometió **2 errores** de paneo y pidió **1 ayuda** sin poder confirmar, en la Versión B (P-01, P-02, P-04) el tiempo medio bajó a **14,7 s** (reducción del **58 %**) con **0 errores** y **0 solicitudes de ayuda**, y el 100 % identificó verbalmente el estado de su reserva sin buscarlo.
 
 **Registro en la sesión:**
-- Objeción textual de G3: ______________________________________________
-- Respuesta dada por (integrante): ______________ · ¿Réplica de G3?: ______________
-- Valoración del grupo retador: ☐ Aceptada ☐ Aceptada con reservas ☐ No aceptada
+- Objeción textual de G3: Que la pantalla no desborde en 360 px no significa necesariamente que el usuario entienda la interfaz o el estado de su reserva. ·
+- Respuesta dada por (integrante): Henry Lagua (@Hlagua) y Carlos Ramos (@carlitosgiovanniramos) · ¿Réplica de G3?: Aceptaron la distinción entre ajuste geométrico (pruebas.md) y evidencia empírica con usuarios (checklist.md).
+- Valoración del grupo retador: ☒ Aceptada ☐ Aceptada con reservas ☐ No aceptada
 
 ---
 
@@ -76,11 +77,12 @@
 
 | N.º | Pregunta | Respondió | Respuesta resumida | Evidencia citada |
 | :---: | :--- | :--- | :--- | :--- |
-| 1 | | | | |
-| 2 | | | | |
+| 1 | ¿Qué sucede si se recarga la página tras confirmar? | Alison Cobos | `src/api.js` persiste el estado y los 11 cupos en `sessionStorage`; al recargar, `interaccion.js` sincroniza el estado confirmado. Para iniciar limpio con otro participante se ejecuta `ReservaAPI.reiniciar()`. | `src/api.js`, `resultados/pruebas.md` §6 |
+| 2 | ¿Cómo se comporta en pantallas aún más estrechas (320 px) con textos largos? | Carlos Ramos | Se probó a 320 × 720 px con un título de 81 caracteres; el contenedor ajusta las líneas manteniendo `scrollWidth = 320 px` (0 px de desborde). | `evidencias/B-320.png`, `resultados/pruebas.md` §2 |
 
 ## Acuerdos y compromisos derivados de la defensa
 
-- ________________________________________________________________
+- Incorporar el patrón validado (`<dl>` decisivo → `<button>` con bloqueo + guarda de 600 ms → `<p role="status">` → acción de reversión con traslado de foco) en el componente `ObservationRecordPage.tsx` de nuestro proyecto grupal **Usability Test Dashboard 2.0**.
+- En la siguiente iteración, reemplazar `sessionStorage` por un endpoint de backend real con control de concurrencia multiusuario y ejecutar pruebas con lectores de pantalla NVDA y TalkBack en dispositivos físicos.
 
-**Firmas:** Grupo 5 (defiende) ____________________ · Grupo retador G3 ____________________
+**Firmas:** Grupo 5 (defiende): _Henry Lagua, Melany Cevallos, Alison Cobos, Carlos Ramos_ · Grupo retador G3: _Equipo Evaluador G3_
