@@ -4,6 +4,8 @@
 - **Institución:** Universidad Técnica de Ambato (UTA) · FISEI · Ingeniería de Software
 - **Asignatura:** Interacción Humano-Computador · Quinto Semestre "A"
 - **Docente:** Ing. Mg. José Caiza
+- **Grupo:** 5 · **Repositorio:** https://github.com/Hlagua/APE5_IHC
+- **Responsable de la ficha:** Melany Saleth Cevallos Goyes (@SalyC15) · rama `prototipo-html` · Issue #2 · **Revisión cruzada:** Alison Marcela Cobos Taco (@Itsuna18)
 - **Proyecto del equipo:** Usability Test Dashboard 2.0 (UTA · IHC)
 - **Pantalla elegida del proyecto:** Bitácora de observaciones — ruta `/dashboard/test-plan/record` (`src/presentation/pages/ObservationRecordPage.tsx`)
 - **Pantalla adaptada en clase:** Boceto A «Elige tu taller» (Caso Aula Abierta) → `src/`
@@ -31,7 +33,10 @@ Al abrir el **Boceto A inicial** (`prototipo-A.html`) en un viewport móvil estr
 2. **Pérdida visual de información y del panel de estado:**
    - La columna derecha que aloja el panel de estado **«Mi reserva»** (`<section class="resumen">`) y los controles de interacción quedan completamente ocultos fuera del área visible de la pantalla (a partir de $x > 580\text{ px}$).
    - La persona usuaria que interactúa desde un teléfono móvil **no puede ver su reserva ni confirmar si su acción tuvo efecto**, a menos que realice un paneo horizontal manual forzado.
-3. **Violación de principios HCI y estándares de accesibilidad:**
+3. **En un teléfono real el fallo cambia de forma, pero persiste:**
+   - Con la emulación de dispositivo móvil de Chromium (meta viewport activo), el navegador no muestra el desborde. Amplía el viewport de diseño a 960 px y **aleja toda la página** (`visualViewport.scale = 0,375`).
+   - El texto de 18 px se ve con un tamaño efectivo de **6,8 px**. «Mi reserva» queda en pantalla, pero ilegible sin hacer zoom con los dedos. En los dos modos, la persona no puede leer el estado de su reserva a simple vista (medición en `resultados/pruebas.md`, sección 3; archivo base en `prototipos/prototipo-A.html`).
+4. **Violación de principios HCI y estándares de accesibilidad:**
    - **Heurística de Nielsen H1 (Visibilidad del estado del sistema):** El sistema oculta la confirmación y la retroalimentación inmediata de la acción.
    - **WCAG 2.1 Criterio de Éxito 1.4.10 (Reajuste / Reflow - Nivel AA):** El contenido debe presentarse sin pérdida de información ni funcionalidad y sin requerir desplazamiento bidimensional (horizontal y vertical).
    - **Control de usuario ausente:** El botón principal venía bloqueado (`disabled`) en el código base, no existía canal de comunicación para lectores de pantalla (`role="status"` ausente) y no se ofrecía la posibilidad de deshacer (cancelar) la reserva.
@@ -39,6 +44,28 @@ Al abrir el **Boceto A inicial** (`prototipo-A.html`) en un viewport móvil estr
 ---
 
 ## 2. Ficha de aplicación al proyecto
+
+### Ficha según la guía de la fase 2
+
+| Campo | Proyecto: Usability Test Dashboard 2.0 (Bitácora de observaciones) | Caso de clase: Aula Abierta (Elige tu taller) |
+| :--- | :--- | :--- |
+| **Actor** | Moderador/a de la prueba de usabilidad | Estudiante |
+| **Tarea principal** | Registrar el desempeño de un participante en una tarea (T1…Tn) | Reservar un lugar en un taller |
+| **Dato clave que decide la acción** | Éxito (Sí/No), tiempo en segundos y número de errores | Horario, lugar y cupos disponibles (`<dl>`) |
+| **Acción principal** | «Agregar al backlog» | «Reservar un lugar» |
+| **Resultado visible** | Mensaje en `<p role="status">` que confirma que el hallazgo se agregó al backlog (o `role="alert"` si falla) | «Reserva confirmada: …» en `<p role="status">`, resumen en verde, cupos 12 → 11 y botón «Ya tienes un lugar» deshabilitado |
+| **Mecanismo para corregir o cancelar** | Editar la fila antes de enviarla; los valores fuera de rango se corrigen solos (errores < 0 → 0; tiempo < 1 → 1) | Botón «Cancelar mi reserva»: restituye el cupo (11 → 12) y devuelve el foco a «Reservar un lugar» |
+
+### Regla de interacción y criterio de aceptación
+
+- **Regla:** impedir envíos duplicados. Mientras la reserva esté confirmada, «Reservar un lugar» queda `disabled` y el controlador ignora cualquier nueva confirmación (`src/interaccion.js` y `ReservaAPI.confirmarReserva()` en `src/api.js`).
+- **Criterio de aceptación medible:**
+  - Con la reserva confirmada (11 cupos), **5 intentos** de activar «Reservar un lugar» (clic o `click()` en consola) dejan **11 cupos**: 0 duplicados en 5 de 5 intentos.
+  - Un doble Enter (dos pulsaciones en menos de 600 ms) deja la reserva **confirmada**: 0 cancelaciones accidentales.
+  - Tras confirmar, el foco queda en «Cancelar mi reserva»; tras cancelar, en «Reservar un lugar».
+  - Verificado en `resultados/pruebas.md`, secciones 4 y 5.
+
+### Secuencia detallada
 
 Se completó la secuencia formal **Actor → Tarea → Dato decisivo → Acción principal → Estado final** tanto para la pantalla del proyecto grupal como para el caso trabajado en clase:
 
@@ -101,7 +128,7 @@ El diseño responsivo sigue estrictamente la metodología **Mobile-First**:
 
 ---
 
-## 6. Estados de interacción y gestión de foco (`src/reserva.js` y `src/api.js`)
+## 6. Estados de interacción y gestión de foco (`src/interaccion.js` y `src/api.js`)
 
 Se conectaron los tres momentos fundamentales del ciclo de vida de la reserva:
 1. **Momento 1 · Disponible (Inicial):**
