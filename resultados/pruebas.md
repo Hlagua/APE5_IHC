@@ -74,6 +74,8 @@ Prueba hecha con pulsaciones reales de teclado (no con clics simulados), partien
 - **Principio:** prevención de errores (Nielsen H5). Se conserva el traslado del foco que pide la guía (WCAG 2.4.3).
 - **Origen:** prueba exploratoria con teclado del equipo, no observación de participantes.
 
+**Suite automática:** `tests/test_runner.html` da **9 de 9 aprobadas** con la corrección (TC-07 espera 700 ms antes de cancelar y la nueva TC-09 comprueba que la activación inmediata de «Cancelar» se ignora). Sin la espera, TC-07 y TC-08 fallaban porque simulaban una cancelación instantánea, justo el caso que H-01 bloquea.
+
 ## 6. Observaciones para la prueba con usuarios
 
 - `src/api.js` guarda la reserva en `sessionStorage`. Al recargar en la misma pestaña, la reserva sigue confirmada (cupos 11). **Entre un participante y otro** hay que abrir una pestaña nueva o ejecutar `ReservaAPI.reiniciar()` en la consola, para que todos empiecen con «Aún no tienes una reserva.».
