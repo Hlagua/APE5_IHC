@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APE 5 · Fase 2 · Grupo 5</title>
+<style>
+  :root {
+    --texto: #1f2629; --suave: #4a5357; --fondo: #f6f7f7; --sup: #fff;
+    --primario: #0b5cad; --ok: #1e7b3a; --mal: #8a1c1c; --foco: #ffbf47; --borde: #c9cfd2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--fondo); color: var(--texto); font: 1rem/1.5 system-ui, "Segoe UI", Roboto, sans-serif; }
+  .barra { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: space-between;
+           padding: .5rem 1rem; background: var(--sup); border-bottom: 2px solid var(--borde); }
+  .barra p { margin: 0; font-weight: 700; font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; }
+  .controles { display: flex; gap: .5rem; align-items: center; }
+  button { font: inherit; font-weight: 600; min-height: 2.75rem; min-width: 2.75rem; padding: .25rem .9rem;
+           border: 2px solid var(--primario); border-radius: .4rem; background: var(--sup); color: var(--primario); cursor: pointer; }
+  button:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+  main { max-width: 64rem; margin: 0 auto; padding: 1rem; }
+  section.diapo { display: none; background: var(--sup); border: 2px solid var(--borde); border-radius: .6rem; padding: 1.25rem; }
+  section.diapo.activa { display: block; }
+  .meta { color: var(--suave); font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin: 0 0 .25rem; }
+  h1 { font-size: clamp(1.4rem, 4vw, 2.2rem); line-height: 1.2; margin: 0 0 1rem; }
+  h2 { font-size: clamp(1.25rem, 3.4vw, 1.8rem); line-height: 1.2; margin: 0 0 1rem; }
+  ul { padding-left: 1.2rem; margin: 0 0 1rem; } li { margin-bottom: .4rem; }
+  code { background: #eef1f3; padding: .05rem .3rem; border-radius: .25rem; font-size: .92em; overflow-wrap: anywhere; }
+  .dos { display: grid; gap: 1rem; }
+  figure { margin: 0; } figure img { width: 100%; height: auto; border: 1px solid var(--borde); border-radius: .4rem; display: block; }
+  .dos figure img { width: auto; max-width: 100%; max-height: 70vh; margin: 0 auto; }
+  figcaption { font-size: .85rem; color: var(--suave); margin-top: .3rem; }
+  .imgs { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+  .tabla { overflow-x: auto; } table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { border: 1px solid var(--borde); padding: .4rem .5rem; text-align: left; } th { background: #eef1f3; }
+  .ok { color: var(--ok); font-weight: 700; } .mal { color: var(--mal); font-weight: 700; }
+  .cita { border-left: 4px solid var(--primario); padding: .5rem .9rem; background: #eef4fb; margin: 0 0 1rem; }
+  .pendiente { border: 2px dashed var(--suave); padding: .6rem .9rem; border-radius: .4rem; color: var(--suave); }
+  .orador { margin-top: 1rem; font-size: .85rem; color: var(--suave); border-top: 1px solid var(--borde); padding-top: .5rem; }
+  .notas { display: none; margin-top: .75rem; padding: .75rem; background: #fff8e6; border: 1px solid #e0c27a; border-radius: .4rem; font-size: .9rem; }
+  body.con-notas .notas { display: block; }
+  @media (min-width: 48rem) {
+    .dos { grid-template-columns: 1fr 1fr; align-items: start; }
+    .imgs { grid-template-columns: repeat(4, 1fr); }
+    section.diapo { padding: 2rem; }
+  }
+  @media print {
+    .barra { display: none; } section.diapo { display: block; page-break-after: always; border: 0; }
+  }
+</style>
+</head>
+<body>
+<header class="barra">
+  <p>UTA · FISEI · IHC 5A · Grupo 5 · APE 5 Fase 2</p>
+  <div class="controles">
+    <button type="button" id="ant" aria-label="Diapositiva anterior">◀</button>
+    <span id="contador" aria-live="polite">1 / 10</span>
+    <button type="button" id="sig" aria-label="Diapositiva siguiente">▶</button>
+    <button type="button" id="btn-notas" aria-pressed="false">Notas</button>
+  </div>
+</header>
+
+<main id="diapos">
+
+<section class="diapo activa" aria-labelledby="d1">
+  <p class="meta">Apertura · 10/11/2026</p>
+  <h1 id="d1">¿Qué evidencia defiende el cambio a Mobile-First?</h1>
+  <p class="cita"><strong>Hipótesis:</strong> en un viewport de 360 px, una estudiante consulta el horario y el lugar del taller, reserva y verifica su estado sin desplazarse horizontalmente y sin pedir ayuda.</p>
+  <ul>
+    <li><strong>Se refuta (técnico)</strong> si <code>scrollWidth &gt; innerWidth</code> en 320, 360, 768 o 1366 px.</li>
+    <li><strong>Se refuta (personas)</strong> si un participante no sabe decir el estado de su reserva sin preguntar.</li>
+  </ul>
+  <p>Grupo 5: Henry Lagua · Melany Cevallos · Alison Cobos · Carlos Ramos · Grupo retador: G3</p>
+  <p class="orador">Orador: Henry Lagua</p>
+  <div class="notas">Antes de mostrar resultados, pedir al público que anote qué observación refutaría la hipótesis.</div>
+</section>
+
+<section class="diapo" aria-labelledby="d2">
+  <p class="meta">Proyecto del grupo</p>
+  <h2 id="d2">La misma ruta, en clase y en nuestro proyecto</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>Campo</th><th>Aula Abierta (clase)</th><th>Usability Test Dashboard</th></tr></thead>
+    <tbody>
+      <tr><td>Actor</td><td>Estudiante</td><td>Moderador/a de la prueba</td></tr>
+      <tr><td>Dato clave</td><td>Horario, lugar y cupos</td><td>Éxito, tiempo y errores</td></tr>
+      <tr><td>Acción principal</td><td>Reservar un lugar</td><td>Agregar al backlog</td></tr>
+      <tr><td>Resultado visible</td><td>«Reserva confirmada» en <code>role="status"</code></td><td>Confirmación en <code>role="status"</code></td></tr>
+      <tr><td>Corregir o cancelar</td><td>Cancelar mi reserva</td><td>Editar la fila; errores &lt; 0 → 0</td></tr>
+    </tbody>
+  </table></div>
+  <p class="orador">Orador: Henry Lagua</p>
+</section>
+
+<section class="diapo" aria-labelledby="d3">
+  <p class="meta">Diagnóstico · boceto A</p>
+  <h2 id="d3">El boceto A falla de dos maneras en móvil</h2>
+  <div class="dos">
+    <ul>
+      <li><code>body { width: 960px }</code> y columnas de 580 + 360 px.</li>
+      <li><strong>Sin emulación móvil:</strong> <code>scrollWidth = 960</code> frente a <code>innerWidth = 360</code> → <span class="mal">+600 px</span> de desborde; «Mi reserva» empieza en x = 600.</li>
+      <li><strong>Con emulación móvil:</strong> Chromium aleja la página a <code>scale = 0,375</code> → el texto de 18 px se ve de <span class="mal">6,8 px</span>. «Cabe», pero no se puede leer.</li>
+      <li>Rompe H1 (visibilidad del estado) y WCAG 1.4.10 (reajuste).</li>
+    </ul>
+    <figure><img src="../evidencias/A-360.png" alt="Boceto A a 360 px: el panel Mi reserva queda fuera de la pantalla; franja roja con desborde de más 600 px"><figcaption>Boceto A a 360 × 800</figcaption></figure>
+  </div>
+  <p class="orador">Oradora: Melany Cevallos</p>
+  <div class="notas">Demostrar en vivo: abrir prototipos/prototipo-A.html a 360 px y ejecutar document.documentElement.scrollWidth.</div>
+</section>
+
+<section class="diapo" aria-labelledby="d4">
+  <p class="meta">Estructura · HTML5</p>
+  <h2 id="d4">Primero el orden de la tarea, después el estilo</h2>
+  <ul>
+    <li><code>&lt;article&gt;</code> tarjeta: <code>&lt;dl&gt;</code> con Horario, Lugar y Cupos <strong>antes</strong> del botón.</li>
+    <li><code>&lt;section&gt;</code> resumen: <code>&lt;p role="status" aria-live="polite"&gt;</code> y «Cancelar mi reserva».</li>
+    <li>Solo <code>&lt;button&gt;</code> nativos: Tab, Enter y Espacio funcionan sin código extra.</li>
+    <li>Sin CSS, la página se lee en orden: título → taller → datos → acción → estado.</li>
+  </ul>
+  <p class="orador">Oradora: Melany Cevallos</p>
+</section>
+
+<section class="diapo" aria-labelledby="d5">
+  <p class="meta">CSS · Mobile-First</p>
+  <h2 id="d5">Una columna antes que dos: corte en 48rem</h2>
+  <div class="dos">
+    <ul>
+      <li>Base: <code>.disposicion { grid-template-columns: 1fr }</code>.</li>
+      <li><code>@media (min-width: 48rem)</code> → <code>3fr 2fr</code>. Solo cambia la geometría.</li>
+      <li>Sin <code>order</code> ni posicionamiento: el orden de Tab es el del DOM.</li>
+      <li>767 px → 1 columna (735 px) · 768 px → 2 columnas (417,6 · 278,4 px).</li>
+      <li>Botones de 44 px, <code>:focus-visible</code> ámbar y <code>prefers-reduced-motion</code>.</li>
+    </ul>
+    <figure><img src="../evidencias/B-768.png" alt="Versión B a 768 px en dos columnas, desborde 0 px"><figcaption>Versión B a 768 × 1024</figcaption></figure>
+  </div>
+  <p class="orador">Oradora: Alison Cobos</p>
+</section>
+
+<section class="diapo" aria-labelledby="d6">
+  <p class="meta">Interacción · prevención de errores</p>
+  <h2 id="d6">Disponible → Confirmada → Cancelada</h2>
+  <ul>
+    <li>Al confirmar: <code>btnReservar.disabled = true</code>, texto «Ya tienes un lugar» y <code>btnCancelar.focus()</code>.</li>
+    <li>Un <code>click()</code> forzado sobre el botón deshabilitado no cambia los cupos (11 → 11).</li>
+    <li>Al cancelar: el botón se oculta y <code>btnReservar.focus()</code> devuelve el foco.</li>
+    <li><strong>Hallazgo H-01 (nuestras pruebas):</strong> un doble Enter reservaba y cancelaba al instante. <span class="mal">Antes: cancelada, 12 cupos</span> → <span class="ok">ahora: confirmada, 11 cupos</span>, con un margen de 600 ms en «Cancelar».</li>
+  </ul>
+  <p class="orador">Oradora: Alison Cobos</p>
+  <div class="notas">Demostrar: Tab → Enter Enter. La reserva sigue confirmada. Esperar 1 s → Enter → se cancela.</div>
+</section>
+
+<section class="diapo" aria-labelledby="d7">
+  <p class="meta">Laboratorio QA · 100 % de zoom</p>
+  <h2 id="d7">scrollWidth = innerWidth en los cuatro viewports</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>Viewport</th><th>Versión B</th><th>Boceto A</th></tr></thead>
+    <tbody>
+      <tr><td>320 × 720</td><td class="ok">320 / 320 · 0 px</td><td class="mal">+640 px</td></tr>
+      <tr><td>360 × 800</td><td class="ok">360 / 360 · 0 px</td><td class="mal">+600 px</td></tr>
+      <tr><td>768 × 1024</td><td class="ok">768 / 768 · 0 px</td><td class="mal">+192 px</td></tr>
+      <tr><td>1366 × 768</td><td class="ok">1366 / 1366 · 0 px</td><td>0 px</td></tr>
+    </tbody>
+  </table></div>
+  <div class="imgs" style="margin-top:1rem">
+    <figure><img src="../evidencias/B-320.png" alt="Versión B a 320 px, desborde 0"><figcaption>320</figcaption></figure>
+    <figure><img src="../evidencias/B-360-confirmada.png" alt="Versión B a 360 px con la reserva confirmada"><figcaption>360</figcaption></figure>
+    <figure><img src="../evidencias/B-768.png" alt="Versión B a 768 px"><figcaption>768</figcaption></figure>
+    <figure><img src="../evidencias/B-1366.png" alt="Versión B a 1366 px"><figcaption>1366</figcaption></figure>
+  </div>
+  <p class="orador">Orador: Carlos Ramos</p>
+</section>
+
+<section class="diapo" aria-labelledby="d8">
+  <p class="meta">Validación con personas</p>
+  <h2 id="d8">Observación en aula con consigna neutral</h2>
+  <p class="cita">«Necesitas asistir al taller del jueves. Averigua a qué hora y dónde se dicta, aparta un lugar y luego deshaz esa acción.»</p>
+  <div class="pendiente">Resultados de P-01, P-02 y P-03 (tiempo, errores, ayudas y dificultades): se completan en la sesión en <code>resultados/checklist.md</code>.</div>
+  <p class="orador">Orador: Carlos Ramos</p>
+</section>
+
+<section class="diapo" aria-labelledby="d9">
+  <p class="meta">Defensa ante G3 · GitHub</p>
+  <h2 id="d9">Ajuste geométrico no es lo mismo que comprensión</h2>
+  <ul>
+    <li><strong>P1:</strong> en 48rem solo cambia <code>grid-template-columns</code>; el DOM no se reordena.</li>
+    <li><strong>P2:</strong> <code>disabled</code>, la API y la guarda de 600 ms; el foco va a «Cancelar» y vuelve a «Reservar».</li>
+    <li><strong>Objeción:</strong> de acuerdo. El boceto A también «cabe» en emulación móvil, pero con texto de 6,8 px. Por eso separamos la evidencia técnica (<code>pruebas.md</code>) de la evidencia con personas (<code>checklist.md</code>).</li>
+  </ul>
+  <div class="tabla"><table>
+    <thead><tr><th>Rama · Issue</th><th>Integrante</th><th>Revisa</th></tr></thead>
+    <tbody>
+      <tr><td><code>plan-clases</code> · #1</td><td>Henry</td><td>Melany</td></tr>
+      <tr><td><code>prototipo-html</code> · #2</td><td>Melany</td><td>Alison</td></tr>
+      <tr><td><code>interfaz-responsive</code> · #3</td><td>Alison</td><td>Carlos</td></tr>
+      <tr><td><code>pruebas-informe</code> · #4</td><td>Carlos</td><td>Henry</td></tr>
+    </tbody>
+  </table></div>
+  <p class="orador">Los cuatro integrantes</p>
+</section>
+
+<section class="diapo" aria-labelledby="d10">
+  <p class="meta">Cierre</p>
+  <h2 id="d10">Conclusiones</h2>
+  <ul>
+    <li><strong>Medido:</strong> 0 px de desborde en 320, 360, 768 y 1366 px; tarea completa solo con teclado; 0 duplicados.</li>
+    <li><strong>Corregido:</strong> H-01, el doble Enter que cancelaba la reserva.</li>
+    <li><strong>Limitación:</strong> pocos participantes, sin lector de pantalla real y cupos guardados solo en el navegador.</li>
+    <li><strong>Siguiente iteración:</strong> 5 participantes en teléfonos reales con NVDA y TalkBack, y una API con control de cupos en el servidor.</li>
+  </ul>
+  <p>Repositorio: <code>github.com/Hlagua/APE5_IHC</code></p>
+  <p class="orador">Orador: Henry Lagua</p>
+</section>
+
+</main>
+
+<script>
+  const diapos = [...document.querySelectorAll('.diapo')];
+  const contador = document.getElementById('contador');
+  const btnNotas = document.getElementById('btn-notas');
+  let i = 0;
+  function ir(n) {
+    i = Math.max(0, Math.min(diapos.length - 1, n));
+    diapos.forEach((d, k) => d.classList.toggle('activa', k === i));
+    contador.textContent = (i + 1) + ' / ' + diapos.length;
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+  }
+  document.getElementById('ant').addEventListener('click', () => ir(i - 1));
+  document.getElementById('sig').addEventListener('click', () => ir(i + 1));
+  btnNotas.addEventListener('click', () => {
+    const on = document.body.classList.toggle('con-notas');
+    btnNotas.setAttribute('aria-pressed', String(on));
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.target.closest && e.target.closest('button')) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') e.preventDefault(); else return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') ir(i + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') ir(i - 1);
+    else if (e.key === 'n' || e.key === 'N') btnNotas.click();
+  });
+  const h = parseInt(location.hash.slice(1), 10);
+  ir(Number.isFinite(h) ? h - 1 : 0);
+</script>
+</body>
+</html>

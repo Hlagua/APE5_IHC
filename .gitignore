@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 ~$*
+_scripts/_tmp/
+# Materiales de clase recibidos (no son parte de la entrega)
+fase2/
