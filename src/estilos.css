@@ -182,3 +182,10 @@ h2 {
     min-width: 12rem;
   }
 }
+
+/* Fase 2 · Respeta la preferencia del sistema de reducir animaciones (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  .boton {
+    transition: none;
+  }
+}

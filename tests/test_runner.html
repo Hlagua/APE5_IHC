@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Suite de Pruebas Automatizadas · APE 5 (Fase 1)</title>
+  <title>Suite de Pruebas Automatizadas · APE 5 (Fases 1 y 2)</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem; background: #f9fafb; color: #111827; }
     h1 { margin-bottom: 0.5rem; }
@@ -22,7 +22,7 @@
   </style>
 </head>
 <body>
-  <h1>Suite de Pruebas de Usabilidad y A11y · APE 5 (Fase 1)</h1>
+  <h1>Suite de Pruebas de Usabilidad y A11y · APE 5 (Fases 1 y 2)</h1>
   <p class="meta">Responsable: <strong>Carlos Giovanni Ramos Jácome</strong> (Tester) · Quinto "A" IHC</p>
 
   <div class="summary">
@@ -50,9 +50,19 @@
     const frame = document.getElementById('test-frame');
     const rows = document.getElementById('test-rows');
 
-    frame.onload = () => {
+    const esperar = (ms) => new Promise(r => setTimeout(r, ms));
+
+    frame.onload = async () => {
       const doc = frame.contentDocument;
       const win = frame.contentWindow;
+
+      // Fase 2: la API guarda la reserva en sessionStorage. Si la pestaña ya tenía
+      // una reserva, se reinicia y se recarga el iframe para partir de «disponible».
+      if (doc.querySelector('.resumen').dataset.estado !== 'disponible' && win.ReservaAPI) {
+        win.ReservaAPI.reiniciar();
+        frame.contentWindow.location.reload();
+        return;
+      }
 
       const tests = [
         {
@@ -115,9 +125,20 @@
           }
         },
         {
-          id: 'TC-07',
-          desc: 'Transición a cancelada y restitución de cupo al cancelar',
+          id: 'TC-09',
+          desc: 'H-01: un doble Enter no cancela la reserva recién confirmada (margen de 600 ms)',
           run: () => {
+            const b2 = doc.getElementById('btn-cancelar');
+            b2.click(); // segunda activación inmediata tras confirmar
+            return doc.querySelector('.resumen').dataset.estado === 'confirmada' &&
+                   Number(doc.getElementById('cupos').textContent) === 11;
+          }
+        },
+        {
+          id: 'TC-07',
+          desc: 'Transición a cancelada y restitución de cupo al cancelar (pasado el margen de 600 ms)',
+          run: async () => {
+            await esperar(700);
             const b1 = doc.getElementById('btn-reservar');
             const b2 = doc.getElementById('btn-cancelar');
             const cupos = doc.getElementById('cupos');
@@ -142,10 +163,10 @@
       let passed = 0;
       let failed = 0;
 
-      tests.forEach(t => {
+      for (const t of tests) {
         let ok = false;
         try {
-          ok = !!t.run();
+          ok = !!(await t.run());
         } catch (e) {
           console.error(e);
           ok = false;
@@ -161,7 +182,7 @@
           <td><span class="badge ${ok ? 'badge-pass' : 'badge-fail'}">${ok ? 'PASÓ' : 'FALLÓ'}</span></td>
         `;
         rows.appendChild(tr);
-      });
+      }
 
       document.getElementById('total-tests').textContent = tests.length;
       document.getElementById('pass-tests').textContent = passed;

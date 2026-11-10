@@ -1,5 +1,5 @@
 /**
- * APE 5 · Fase 1 · Controlador de Interacción y Gestión Accesible del Foco
+ * APE 5 · Controlador de interacción y gestión accesible del foco (src/interaccion.js)
  * Desarrollado por: Melany Saleth Cevallos Goyes (@SalyC15)
  * Rol: Desarrollador Front-End (Vistas, componentes UI, diseño, wizard)
  *
@@ -20,6 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Verificar si la capa de API de Alison (@Itsuna18) está disponible
   const api = window.ReservaAPI || null;
+
+  // PREVENCIÓN DE ERRORES (Nielsen H5) · Hallazgo H-01 de la fase 2:
+  // al confirmar, el foco pasa a «Cancelar»; un segundo Enter accidental
+  // (doble pulsación) cancelaba la reserva recién hecha. Durante este margen
+  // el botón Cancelar ignora activaciones.
+  const MARGEN_DOBLE_PULSACION_MS = 600;
+  let cancelarBloqueadoHasta = 0;
 
   /**
    * Actualiza la interfaz visual y la región accesible según el nuevo estado
@@ -74,11 +81,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // GESTIÓN DE FOCO ACCESIBLE (WCAG 2.4.3):
     // Como btnReservar queda disabled, el foco de teclado se mueve explícitamente
     // a la siguiente acción lógica disponible (btnCancelar).
+    cancelarBloqueadoHasta = performance.now() + MARGEN_DOBLE_PULSACION_MS;
     btnCancelar.focus();
   });
 
   // Evento: Cancelar reserva
   btnCancelar.addEventListener("click", () => {
+    // Ignora la segunda pulsación de un doble Enter (ver hallazgo H-01).
+    if (performance.now() < cancelarBloqueadoHasta) return;
+
     if (api) {
       const res = api.cancelarReserva();
       if (!res.exito) return;
