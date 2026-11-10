@@ -2,7 +2,7 @@
 
 **Repositorio:** https://github.com/Hlagua/APE5_IHC
 
-Las 4 ramas ya existen en el repositorio local de Henry, con un commit a nombre de cada integrante. Los Issues se crean primero (quedan como #1 a #4) y los Pull Requests después (quedan como #5 a #8). Cada PR cierra su Issue con `Closes #N` al fusionarse.
+Las 4 ramas ya existen en el repositorio local de Henry, con los commits a nombre de cada integrante. Los Issues se crean primero (quedan como #1 a #4) y los Pull Requests después (quedan como #5 a #8). Cada PR cierra su Issue con `Closes #N` al fusionarse.
 
 | Rama | Integrante | Issue | PR | Revisor |
 | :--- | :--- | :---: | :---: | :--- |
@@ -170,6 +170,7 @@ Dejar la interfaz B lista para la defensa: controlador con el nombre que pide la
 - [ ] Renombrar `src/reserva.js` → `src/interaccion.js` y actualizar `src/index.html`.
 - [ ] Corregir el hallazgo H-01: un doble Enter reservaba y cancelaba al instante (margen de 600 ms en «Cancelar»).
 - [ ] `src/estilos.css`: respetar `prefers-reduced-motion`.
+- [ ] `tests/test_runner.html`: adaptar TC-07 al margen de 600 ms, agregar TC-09 (doble Enter) y reiniciar `sessionStorage` antes de ejecutar.
 - [ ] `docs/preguntas.md`: respuestas a la pregunta 1 (48rem y Tab), la pregunta 2 (disabled y foco) y la objeción (ajuste frente a comprensión), con espacio para el acta.
 
 ## Criterio de aceptación
@@ -187,7 +188,7 @@ git checkout main; git pull
 git checkout -b interfaz-responsive
 git mv src/reserva.js src/interaccion.js
 # editar src/index.html: <script src="interaccion.js" defer></script>
-git add src/interaccion.js src/index.html src/estilos.css docs/preguntas.md
+git add src/interaccion.js src/index.html src/estilos.css tests/test_runner.html docs/preguntas.md
 git commit -m "feat(interaccion): controlador interaccion.js con prevención de doble pulsación, reduced-motion y respuestas de defensa (#3)"
 git push -u origin interfaz-responsive
 ```
@@ -203,6 +204,7 @@ Closes #3
 - `src/reserva.js` → `src/interaccion.js` (nombre que pide la guía) y `src/index.html` actualizado.
 - Corrección H-01: antes, Tab → Enter Enter terminaba en «cancelada» con 12 cupos; ahora termina en «confirmada» con 11. Se mantiene `btnCancelar.focus()`.
 - `src/estilos.css`: `@media (prefers-reduced-motion: reduce)`.
+- `tests/test_runner.html`: 9 de 9 pruebas aprobadas (nueva TC-09 para el doble Enter).
 - `docs/preguntas.md`: respuestas preparadas y acta para completar durante la defensa con G3.
 
 ## Cómo revisar
@@ -218,6 +220,7 @@ Revisé el PR #7 (interfaz-responsive).
 - Probé Tab → Enter Enter a 360 px: la reserva queda confirmada (11 cupos) y el foco en «Cancelar mi reserva». H-01 corregido.
 - Enter sobre «Cancelar» después de 1 s: cancela, cupos 12, foco en «Reservar un lugar».
 - La media query sigue en 48rem y no se usa `order`: el orden de Tab es igual al del DOM en 360 y 1366 px.
+- `tests/test_runner.html` da 9 de 9 aprobadas.
 - Las respuestas de `docs/preguntas.md` citan archivos y mediciones reales.
 Aprobado ✅ — @carlitosgiovanniramos
 ```

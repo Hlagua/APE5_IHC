@@ -31,7 +31,7 @@ Cada rama toca archivos distintos, así que los 4 Pull Requests pueden fusionars
 | :---: | :--- | :--- | :---: | :--- | :--- |
 | 1 | Henry Daniel Lagua Flores (@Hlagua) — coordinador | `plan-clases` | #1 | `README.md`, `.gitignore`, `docs/plan.md`, `docs/github.md`, `presentacion/` | Melany |
 | 2 | Melany Saleth Cevallos Goyes (@SalyC15) | `prototipo-html` | #2 | `prototipos/prototipo-A.html`, `docs/proyecto.md` | Alison |
-| 3 | Alison Marcela Cobos Taco (@Itsuna18) | `interfaz-responsive` | #3 | `src/interaccion.js` (antes `reserva.js`), `src/index.html`, `src/estilos.css`, `docs/preguntas.md` | Carlos |
+| 3 | Alison Marcela Cobos Taco (@Itsuna18) | `interfaz-responsive` | #3 | `src/interaccion.js` (antes `reserva.js`), `src/index.html`, `src/estilos.css`, `tests/test_runner.html`, `docs/preguntas.md` | Carlos |
 | 4 | Carlos Giovanni Ramos Jácome (@carlitosgiovanniramos) | `pruebas-informe` | #4 | `evidencias/`, `resultados/`, `docs/conclusiones.md`, `_scripts/ape5_fase2_*.py`, `06_documento/APE5_Fase2_*` | Henry |
 
 ## 4. Oradores de la presentación (`presentacion/index.html`)
