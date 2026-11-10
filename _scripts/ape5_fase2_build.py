@@ -161,11 +161,11 @@ R.append(d.para('El presente informe documenta la fase 2 del APE 5 del **Grupo 5
                 'validó la versión B en cuatro resoluciones, se observó a compañeros de otro grupo usándola y se defendieron sus decisiones ante el grupo retador G3. '
                 'El mismo patrón se aplica a la pantalla «Bitácora de observaciones» del proyecto del grupo, Usability Test Dashboard 2.0.'))
 R.append(d.table([2300, 1600, 1700, 1300, 1244], [
-    ['Integrante', 'Rol', 'Usuario GitHub', 'Rama · Issue', 'Revisa'],
-    ['Henry Daniel Lagua Flores (coordinador)', 'QA / Arquitecto', '@Hlagua', 'plan-clases · #1', 'Carlos (#4)'],
-    ['Melany Saleth Cevallos Goyes', 'Front-End', '@SalyC15', 'prototipo-html · #2', 'Henry (#1)'],
-    ['Alison Marcela Cobos Taco', 'Back-End', '@Itsuna18', 'interfaz-responsive · #3', 'Melany (#2)'],
-    ['Carlos Giovanni Ramos Jácome', 'Tester', '@carlitosgiovanniramos', 'pruebas-informe · #4', 'Alison (#3)'],
+    ['Integrante', 'Rol', 'Usuario GitHub', 'Rama · Issue', 'Revisado por'],
+    ['Henry Daniel Lagua Flores (coordinador)', 'QA / Arquitecto', '@Hlagua', 'plan-clases · #1', 'Melany (#5)'],
+    ['Melany Saleth Cevallos Goyes', 'Front-End', '@SalyC15', 'prototipo-html · #2', 'Alison (#6)'],
+    ['Alison Marcela Cobos Taco', 'Back-End', '@Itsuna18', 'interfaz-responsive · #3', 'Carlos (#7)'],
+    ['Carlos Giovanni Ramos Jácome', 'Tester', '@carlitosgiovanniramos', 'pruebas-informe · #4', 'Henry (#8)'],
 ]))
 R.append(d.link_para('Repositorio de GitHub: ', REPO_URL))
 
