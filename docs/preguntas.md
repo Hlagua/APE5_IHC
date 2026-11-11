@@ -1,8 +1,8 @@
 # APE 5 · Acta de defensa cruzada QA/UX · CaféU «Mi pedido»
 
 - **Grupo que defiende:** Grupo 5 — Henry Lagua (@Hlagua) · Melany Cevallos (@SalyC15) · Alison Cobos (@Itsuna18) · Carlos Ramos (@carlitosgiovanniramos)
-- **Grupo retador (QA/UX):** G3 — integrantes: ______________________________________
-- **Fecha:** ___/___/2026 · **Hora de inicio:** ______ · **Hora de cierre:** ______
+- **Grupo retador (QA/UX):** G3 — integrantes: David Morales, Pamela Quinatoa, Kevin Salazar
+- **Fecha:** 11/11/2026 · **Hora de inicio:** 09:30 · **Hora de cierre:** 10:15
 - **Responsable del acta:** Alison Marcela Cobos Taco (@Itsuna18) · rama `interfaz-responsive` · Issue #3 · **Revisión cruzada:** Carlos Giovanni Ramos Jácome (@carlitosgiovanniramos)
 
 > Cada respuesta se apoya en un archivo del repositorio, una medición de `resultados/pruebas.md` o una observación de `resultados/checklist.md`. En «Registro en la sesión» se anota **lo que realmente se dijo**.

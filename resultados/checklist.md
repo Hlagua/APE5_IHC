@@ -1,9 +1,9 @@
 # APE 5 · Observación con usuarios en aula · CaféU «Mi pedido»
 
 - **Grupo:** 5 · **Responsable del registro:** Carlos Giovanni Ramos Jácome (@carlitosgiovanniramos) · rama `pruebas-informe` · Issue #4
-- **Moderación y cronómetro:** _________________ · **Registro:** _________________
+- **Moderación y cronómetro:** Carlos Giovanni Ramos Jácome · **Registro:** Melany Saleth Cevallos Goyes
 - **Revisión cruzada:** Henry Daniel Lagua Flores (@Hlagua)
-- **Fecha:** ___/___/2026 · **Lugar:** _________________
+- **Fecha:** 11/11/2026 · **Lugar:** Laboratorio de Cómputo FISEI - UTA
 
 > Registrar **solo lo que se observe en la sesión**, con participantes de otros grupos. No completar filas con datos supuestos ni copiar resultados de otra pantalla.
 
