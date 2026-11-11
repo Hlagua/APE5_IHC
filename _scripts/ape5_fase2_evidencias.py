@@ -1,7 +1,7 @@
 """Capturas de evidencia de la fase 2 (APE 5) en cuatro viewports.
 
 Uso: con un servidor local sirviendo la raíz del repositorio,
-    python -m http.server 8766 --directory <repo>
+    python -m http.server 8768 --directory <repo>
 ejecutar:
     python _scripts/ape5_fase2_evidencias.py
 
@@ -18,7 +18,7 @@ TMP = os.path.join(REPO, '_scripts', '_tmp')
 os.makedirs(EVID, exist_ok=True)
 os.makedirs(TMP, exist_ok=True)
 CHROME = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
-BASE = 'http://127.0.0.1:8766/'
+BASE = 'http://127.0.0.1:8768/'
 
 VIEWPORTS = [(320, 720), (360, 800), (768, 1024), (1366, 768)]
 
@@ -81,9 +81,9 @@ if __name__ == '__main__':
     for w, h in VIEWPORTS:
         resultados.append(capturar('../../src/index.html', w, h, 'B-%d.png' % w))
     resultados.append(capturar('../../src/index.html', 360, 800, 'B-360-confirmada.png',
-                               "d.getElementById('btn-reservar').click();"))
+                               "d.getElementById('btn-confirmar').click();"))
     resultados.append(capturar('../../src/index.html', 1366, 768, 'B-1366-confirmada.png',
-                               "d.getElementById('btn-reservar').click();"))
+                               "d.getElementById('btn-confirmar').click();"))
     for w, h in VIEWPORTS:
         resultados.append(capturar('../../prototipos/prototipo-A.html', w, h, 'A-%d.png' % w))
     with open(os.path.join(TMP, 'mediciones.json'), 'w', encoding='utf8') as fh:
