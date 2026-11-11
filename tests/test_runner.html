@@ -2,191 +2,114 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Suite de Pruebas Automatizadas · APE 5 (Fases 1 y 2)</title>
+  <title>Suite de pruebas · APE 5 · CaféU «Mi pedido»</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 2rem; background: #f9fafb; color: #111827; }
     h1 { margin-bottom: 0.5rem; }
     .meta { color: #6b7280; margin-bottom: 1.5rem; }
-    .summary { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+    .summary { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
     .card { background: white; padding: 1rem 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb; }
     .card .val { font-size: 1.75rem; font-weight: 700; }
     .card.pass .val { color: #16a34a; }
     .card.fail .val { color: #dc2626; }
-    table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; }
+    .tabla { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: white; border: 1px solid #e5e7eb; }
     th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
     th { background: #f3f4f6; font-size: 0.875rem; }
     .badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
     .badge-pass { background: #dcfce7; color: #15803d; }
     .badge-fail { background: #fee2e2; color: #b91c1c; }
-    iframe { width: 360px; height: 400px; border: 2px solid #94a3b8; border-radius: 6px; margin-top: 1rem; }
+    iframe { width: 360px; max-width: 100%; height: 520px; border: 2px solid #94a3b8; border-radius: 6px; margin-top: 1rem; }
   </style>
 </head>
 <body>
-  <h1>Suite de Pruebas de Usabilidad y A11y · APE 5 (Fases 1 y 2)</h1>
-  <p class="meta">Responsable: <strong>Carlos Giovanni Ramos Jácome</strong> (Tester) · Quinto "A" IHC</p>
+  <h1>Suite de pruebas de usabilidad y accesibilidad · APE 5 · CaféU</h1>
+  <p class="meta">Pantalla «Mi pedido» · Grupo 5 · Responsable: <strong>Carlos Giovanni Ramos Jácome</strong> (Tester) · Quinto "A" IHC</p>
 
   <div class="summary">
-    <div class="card"><div class="val" id="total-tests">0</div><div>Total Pruebas</div></div>
+    <div class="card"><div class="val" id="total-tests">0</div><div>Total de pruebas</div></div>
     <div class="card pass"><div class="val" id="pass-tests">0</div><div>Aprobadas</div></div>
     <div class="card fail"><div class="val" id="fail-tests">0</div><div>Fallidas</div></div>
   </div>
 
-  <table>
+  <div class="tabla"><table>
     <thead>
-      <tr>
-        <th>ID</th>
-        <th>Descripción de la Prueba</th>
-        <th>Criterio Evaluado</th>
-        <th>Resultado</th>
-      </tr>
+      <tr><th>ID</th><th>Descripción</th><th>Criterio</th><th>Resultado</th></tr>
     </thead>
     <tbody id="test-rows"></tbody>
-  </table>
+  </table></div>
 
-  <h2>Sandbox de Validación en Móvil (360 px)</h2>
-  <iframe id="test-frame" src="../src/index.html"></iframe>
+  <h2>Pantalla bajo prueba (360 px)</h2>
+  <iframe id="test-frame" src="../src/index.html" title="CaféU · Mi pedido"></iframe>
 
   <script>
     const frame = document.getElementById('test-frame');
     const rows = document.getElementById('test-rows');
-
     const esperar = (ms) => new Promise(r => setTimeout(r, ms));
 
     frame.onload = async () => {
       const doc = frame.contentDocument;
       const win = frame.contentWindow;
 
-      // Fase 2: la API guarda la reserva en sessionStorage. Si la pestaña ya tenía
-      // una reserva, se reinicia y se recarga el iframe para partir de «disponible».
-      if (doc.querySelector('.resumen').dataset.estado !== 'disponible' && win.ReservaAPI) {
-        win.ReservaAPI.reiniciar();
-        frame.contentWindow.location.reload();
+      // La API guarda el pedido en sessionStorage. Si la pestaña ya tenía un pedido,
+      // se reinicia y se recarga el iframe para partir de «pendiente».
+      if (doc.querySelector('.resumen').dataset.estado !== 'pendiente' && win.PedidoAPI) {
+        win.PedidoAPI.reiniciar();
+        win.location.reload();
         return;
       }
 
+      const $ = (id) => doc.getElementById(id);
+      const estado = () => doc.querySelector('.resumen').dataset.estado;
+      const saldo = () => $('saldo').textContent;
+
       const tests = [
-        {
-          id: 'TC-01',
-          desc: 'Estructura semántica HTML5 (header, main, article, dl, section)',
+        { id: 'TC-01', crit: 'HTML5 semántico', desc: 'Estructura: header, main, article, dl, section',
+          run: () => doc.querySelector('header') && doc.querySelector('main') && doc.querySelector('article.tarjeta') &&
+                     doc.querySelector('dl.datos') && doc.querySelector('section.resumen') },
+        { id: 'TC-02', crit: 'WCAG 4.1.3', desc: 'Región de estado con role="status"',
+          run: () => $('estado') && $('estado').getAttribute('role') === 'status' },
+        { id: 'TC-03', crit: 'WCAG 2.1.1', desc: 'Controles nativos <button type="button">',
+          run: () => $('btn-confirmar').type === 'button' && $('btn-cancelar').type === 'button' },
+        { id: 'TC-04', crit: 'WCAG 1.4.10', desc: 'Sin desborde horizontal a 360 px (scrollWidth <= innerWidth)',
+          run: () => doc.documentElement.scrollWidth <= win.innerWidth },
+        { id: 'TC-05', crit: 'Guía · confirmar', desc: 'Confirmar: estado «confirmado», pedido #A24, botón disabled, cobro de $4.25',
           run: () => {
-            return doc.querySelector('header') &&
-                   doc.querySelector('main') &&
-                   doc.querySelector('article.tarjeta') &&
-                   doc.querySelector('dl.datos') &&
-                   doc.querySelector('section.resumen');
-          }
-        },
-        {
-          id: 'TC-02',
-          desc: 'Región accesible de estado role="status"',
-          run: () => {
-            const p = doc.getElementById('estado');
-            return p && p.getAttribute('role') === 'status';
-          }
-        },
-        {
-          id: 'TC-03',
-          desc: 'Botones nativos con tipo type="button"',
-          run: () => {
-            const b1 = doc.getElementById('btn-reservar');
-            const b2 = doc.getElementById('btn-cancelar');
-            return b1 && b1.type === 'button' && b2 && b2.type === 'button';
-          }
-        },
-        {
-          id: 'TC-04',
-          desc: 'Sin scroll horizontal a 360 px de ancho',
-          run: () => {
-            return doc.body.scrollWidth <= 365;
-          }
-        },
-        {
-          id: 'TC-05',
-          desc: 'Transición a estado confirmada al hacer clic en reservar',
-          run: () => {
-            const b1 = doc.getElementById('btn-reservar');
-            const b2 = doc.getElementById('btn-cancelar');
-            const cupos = doc.getElementById('cupos');
-            const inicial = Number(cupos.textContent);
-            b1.click();
-            const resumen = doc.querySelector('.resumen');
-            return resumen.dataset.estado === 'confirmada' &&
-                   b1.disabled === true &&
-                   !b2.hidden &&
-                   Number(cupos.textContent) === inicial - 1;
-          }
-        },
-        {
-          id: 'TC-06',
-          desc: 'Gestión de foco: el foco se traslada al botón de cancelar al confirmar',
-          run: () => {
-            const b2 = doc.getElementById('btn-cancelar');
-            return doc.activeElement === b2;
-          }
-        },
-        {
-          id: 'TC-09',
-          desc: 'H-01: un doble Enter no cancela la reserva recién confirmada (margen de 600 ms)',
-          run: () => {
-            const b2 = doc.getElementById('btn-cancelar');
-            b2.click(); // segunda activación inmediata tras confirmar
-            return doc.querySelector('.resumen').dataset.estado === 'confirmada' &&
-                   Number(doc.getElementById('cupos').textContent) === 11;
-          }
-        },
-        {
-          id: 'TC-07',
-          desc: 'Transición a cancelada y restitución de cupo al cancelar (pasado el margen de 600 ms)',
+            $('btn-confirmar').click();
+            return estado() === 'confirmado' && $('btn-confirmar').disabled && !$('btn-cancelar').hidden &&
+                   saldo() === '$5.75' && $('estado').textContent.includes('#A24');
+          } },
+        { id: 'TC-06', crit: 'WCAG 2.4.3', desc: 'Foco trasladado a «Cancelar pedido» al confirmar',
+          run: () => doc.activeElement === $('btn-cancelar') },
+        { id: 'TC-07', crit: 'Nielsen H5', desc: 'Sin doble cobro: 5 activaciones más de «Confirmar» dejan el saldo en $5.75',
+          run: () => { for (let i = 0; i < 5; i++) $('btn-confirmar').click(); return saldo() === '$5.75'; } },
+        { id: 'TC-08', crit: 'Nielsen H5 · H-01', desc: 'Doble Enter: activar «Cancelar» de inmediato no cancela el pedido recién pagado',
+          run: () => { $('btn-cancelar').click(); return estado() === 'confirmado' && saldo() === '$5.75'; } },
+        { id: 'TC-09', crit: 'Nielsen H3', desc: 'Cancelar (pasados 600 ms): estado «cancelado» y devolución a $10.00',
           run: async () => {
             await esperar(700);
-            const b1 = doc.getElementById('btn-reservar');
-            const b2 = doc.getElementById('btn-cancelar');
-            const cupos = doc.getElementById('cupos');
-            b2.click();
-            const resumen = doc.querySelector('.resumen');
-            return resumen.dataset.estado === 'cancelada' &&
-                   b1.disabled === false &&
-                   b2.hidden === true &&
-                   Number(cupos.textContent) === 12;
-          }
-        },
-        {
-          id: 'TC-08',
-          desc: 'Gestión de foco: el foco regresa a reservar al cancelar',
-          run: () => {
-            const b1 = doc.getElementById('btn-reservar');
-            return doc.activeElement === b1;
-          }
-        }
+            $('btn-cancelar').click();
+            return estado() === 'cancelado' && !$('btn-confirmar').disabled && $('btn-cancelar').hidden && saldo() === '$10.00';
+          } },
+        { id: 'TC-10', crit: 'WCAG 2.4.3', desc: 'Foco devuelto a «Confirmar y pagar» al cancelar',
+          run: () => doc.activeElement === $('btn-confirmar') }
       ];
 
-      let passed = 0;
-      let failed = 0;
-
+      let ok = 0, ko = 0;
       for (const t of tests) {
-        let ok = false;
-        try {
-          ok = !!(await t.run());
-        } catch (e) {
-          console.error(e);
-          ok = false;
-        }
-
-        if (ok) passed++; else failed++;
-
+        let r = false;
+        try { r = !!(await t.run()); } catch (e) { console.error(t.id, e); }
+        r ? ok++ : ko++;
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${t.id}</strong></td>
-          <td>${t.desc}</td>
-          <td>WCAG 2.1 / Guía Práctica APE 5</td>
-          <td><span class="badge ${ok ? 'badge-pass' : 'badge-fail'}">${ok ? 'PASÓ' : 'FALLÓ'}</span></td>
-        `;
+        tr.innerHTML = `<td><strong>${t.id}</strong></td><td>${t.desc.replace(/</g, '&lt;')}</td><td>${t.crit}</td>` +
+          `<td><span class="badge ${r ? 'badge-pass' : 'badge-fail'}">${r ? 'PASÓ' : 'FALLÓ'}</span></td>`;
         rows.appendChild(tr);
       }
-
+      // deja la pantalla de prueba limpia para quien la abra después
+      win.PedidoAPI.reiniciar();
       document.getElementById('total-tests').textContent = tests.length;
-      document.getElementById('pass-tests').textContent = passed;
-      document.getElementById('fail-tests').textContent = failed;
+      document.getElementById('pass-tests').textContent = ok;
+      document.getElementById('fail-tests').textContent = ko;
     };
   </script>
 </body>

@@ -1,29 +1,26 @@
-/* ==========================================================================
-   APE 5 · Fase 1 · Hoja de Estilos Mobile-First y Diseño Adaptable
-   Desarrollado por: Melany Saleth Cevallos Goyes (@SalyC15)
-   Rol: Desarrollador Front-End (Vistas, componentes UI, diseño, wizard)
-   
-   Principios arquitectónicos:
-   1. Una sola columna base para pantallas móviles (< 48rem).
-   2. Activación de dos columnas a partir de @media (min-width: 48rem) (768 px).
-   3. Preservación intacta del orden de lectura semántico del HTML.
-   4. Objetivos táctiles mínimos de 44x44 px (WCAG 2.5.5 / 2.5.8).
-   5. Indicadores de foco visibles de alto contraste (WCAG 2.4.7).
-   ========================================================================== */
+/**
+ * APE 5 · CaféU · «Mi pedido» (versión B, Mobile-First)
+ * 1. Una sola columna base para móviles (320 y 360 px).
+ * 2. Dos columnas desde @media (min-width: 48rem) (768 px), sin alterar el orden del DOM.
+ * Paleta tomada del prototipo CaféU v3.1 del APE 4.
+ */
 
 :root {
-  --texto: #1f2629;
-  --texto-suave: #4a5357;
-  --fondo: #f6f7f7;
-  --superficie: #ffffff;
-  --borde: #758084;
-  --primario: #0b5cad;
-  --primario-oscuro: #08457f;
-  --exito-fondo: #e6f4ea;
-  --exito-borde: #1e7b3a;
-  --aviso-fondo: #fff4e0;
-  --aviso-borde: #a35a00;
-  --foco: #ffbf47;
+  --texto: #1F1A17;
+  --texto-sec: #6B625C;
+  --fondo: #FAF7F3;
+  --superficie: #FFFFFF;
+  --borde: #E3DAD2;
+  --primario: #6B3F24;
+  --primario-presionado: #4E2D19;
+  --primario-suave: #F3E7DC;
+  --exito: #2E7D4F;
+  --exito-suave: #E6F4EC;
+  --aviso: #8A4B00;
+  --aviso-suave: #FFF3E0;
+  --deshab: #E2DCD6;
+  --texto-deshab: #5E5650;
+  --foco: #1F1A17;
 }
 
 *,
@@ -36,25 +33,30 @@ body {
   margin: 0;
   background: var(--fondo);
   color: var(--texto);
-  font: 1rem/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  font: 1rem/1.6 "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
 }
 
+/* Cabecera de marca, fuera de la tarea principal */
 .cabecera {
   background: var(--superficie);
-  border-bottom: 2px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
   padding: 0.75rem 1rem;
 }
 
 .marca {
   margin: 0;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   color: var(--primario);
+  font-size: 1.125rem;
 }
 
-/* Ancho fluido contenedor: sin anchos fijos de 960px */
+.sede {
+  margin: 0;
+  color: var(--texto-sec);
+  font-size: 0.875rem;
+}
+
+/* Ancho fluido: nada de 960 px fijos */
 .contenido {
   width: 100%;
   max-width: 60rem;
@@ -69,11 +71,11 @@ h1 {
 }
 
 h2 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   margin: 0 0 0.75rem;
 }
 
-/* Mobile-First: Una sola columna por defecto (tarjeta arriba, resumen abajo) */
+/* Mobile-First: una columna por defecto (tarjeta arriba, estado debajo) */
 .disposicion {
   display: grid;
   grid-template-columns: 1fr;
@@ -83,12 +85,32 @@ h2 {
 .tarjeta,
 .resumen {
   background: var(--superficie);
-  border: 2px solid var(--borde);
-  border-radius: 0.5rem;
+  border: 1px solid var(--borde);
+  border-radius: 0.75rem;
   padding: 1rem;
+  min-width: 0; /* permite que el texto largo se ajuste dentro de la cuadrícula */
 }
 
-/* Jerarquía: horario y lugar antes del botón de acción */
+.productos {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0 0 0.75rem;
+  border-bottom: 1px solid var(--borde);
+}
+
+.productos li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.3rem 0;
+}
+
+.productos small {
+  display: block;
+  color: var(--texto-sec);
+}
+
+/* Jerarquía: total, retiro y pago antes del botón */
 .datos {
   margin: 0 0 1rem;
 }
@@ -102,38 +124,43 @@ h2 {
 
 .datos dt {
   font-weight: 700;
-  min-width: 5rem;
-  color: var(--texto-suave);
+  min-width: 4.5rem;
 }
 
 .datos dd {
   margin: 0;
-  font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
-/* Visibilidad del estado (H1 Nielsen) */
+#total {
+  font-weight: 700;
+  color: var(--primario);
+}
+
+/* Visibilidad del estado del pedido */
 .resumen p {
   margin: 0 0 1rem;
+  overflow-wrap: anywhere;
 }
 
-.resumen[data-estado="confirmada"] {
-  background: var(--exito-fondo);
-  border-color: var(--exito-borde);
+.resumen[data-estado="confirmado"] {
+  background: var(--exito-suave);
+  border: 2px solid var(--exito);
 }
 
-.resumen[data-estado="cancelada"] {
-  background: var(--aviso-fondo);
-  border-color: var(--aviso-borde);
+.resumen[data-estado="cancelado"] {
+  background: var(--aviso-suave);
+  border: 2px solid var(--aviso);
 }
 
-/* Controles de botón nativos con objetivo táctil >= 44px */
+/* Botones nativos con objetivo táctil de al menos 44 px */
 .boton {
   font: inherit;
   font-weight: 600;
-  min-height: 2.75rem; /* 44 px exactos para WCAG Target Size */
+  min-height: 2.75rem;
   width: 100%;
   padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
+  border-radius: 0.6rem;
   border: 2px solid var(--primario);
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease;
@@ -145,7 +172,7 @@ h2 {
 }
 
 .boton--primario:hover:not(:disabled) {
-  background: var(--primario-oscuro);
+  background: var(--primario-presionado);
 }
 
 .boton--secundario {
@@ -154,18 +181,18 @@ h2 {
 }
 
 .boton:disabled {
-  background: #d5d9db;
-  border-color: #d5d9db;
-  color: var(--texto-suave);
+  background: var(--deshab);
+  border-color: var(--deshab);
+  color: var(--texto-deshab);
   cursor: not-allowed;
 }
 
 .boton:focus-visible {
   outline: 3px solid var(--foco);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
-/* Punto de corte: A 48rem (768 px con fuente estándar 16px) se activan dos columnas */
+/* Punto de corte: a 48rem (768 px con fuente de 16 px) se activan dos columnas */
 @media (min-width: 48rem) {
   .contenido {
     padding: 2rem 1.5rem;
@@ -183,7 +210,7 @@ h2 {
   }
 }
 
-/* Fase 2 · Respeta la preferencia del sistema de reducir animaciones (WCAG 2.3.3) */
+/* Respeta la preferencia del sistema de reducir animaciones (WCAG 2.3.3) */
 @media (prefers-reduced-motion: reduce) {
   .boton {
     transition: none;
