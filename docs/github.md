@@ -1,304 +1,159 @@
-# APE 5 · Fase 2 · Plan de trabajo en GitHub (Grupo 5)
+# APE 5 · Plan de trabajo en GitHub · Ronda CaféU (Grupo 5)
 
 **Repositorio:** https://github.com/Hlagua/APE5_IHC
 
-Las 4 ramas ya existen en el repositorio local de Henry, con los commits a nombre de cada integrante. Los Issues se crean primero (quedan como #1 a #4) y los Pull Requests después (quedan como #5 a #8). Cada PR cierra su Issue con `Closes #N` al fusionarse.
+La primera ronda (Issues #1 a #4 y PRs #5 a #8) integró la versión de clase «Aula Abierta». Esta segunda ronda **rehace el APE 5 sobre CaféU**, el proyecto del grupo desde el APE 4. Se usan las mismas cuatro ramas de la guía, ahora con commits nuevos sobre `main`.
 
-| Rama | Integrante | Issue | PR | Revisor |
+Si no se crea nada más en el repositorio entre medio, los Issues nuevos quedarán como **#9 a #12** y los PRs como **#13 a #16**. Antes de pegar los textos, comprueben los números que les asigna GitHub.
+
+| Rama | Integrante | Issue | PR | Revisa (desde su cuenta) |
 | :--- | :--- | :---: | :---: | :--- |
-| `plan-clases` | Henry Daniel Lagua Flores (@Hlagua) | #1 | #5 | Melany (@SalyC15) |
-| `prototipo-html` | Melany Saleth Cevallos Goyes (@SalyC15) | #2 | #6 | Alison (@Itsuna18) |
-| `interfaz-responsive` | Alison Marcela Cobos Taco (@Itsuna18) | #3 | #7 | Carlos (@carlitosgiovanniramos) |
-| `pruebas-informe` | Carlos Giovanni Ramos Jácome (@carlitosgiovanniramos) | #4 | #8 | Henry (@Hlagua) |
+| `plan-clases` | Henry Daniel Lagua Flores (@Hlagua) | #9 | #13 | Melany (@SalyC15) |
+| `prototipo-html` | Melany Saleth Cevallos Goyes (@SalyC15) | #10 | #14 | Alison (@Itsuna18) |
+| `interfaz-responsive` | Alison Marcela Cobos Taco (@Itsuna18) | #11 | #15 | Carlos (@carlitosgiovanniramos) |
+| `pruebas-informe` | Carlos Giovanni Ramos Jácome (@carlitosgiovanniramos) | #12 | #16 | Henry (@Hlagua) |
+
+> **Importante:** en la primera ronda los 4 PRs solo tenían revisión del bot de Copilot. La guía pide **revisión cruzada entre integrantes**: cada revisor entra con **su propia cuenta** → *Files changed* → *Review changes* → **Approve**, y pega el texto de su sección. El PR se fusiona solo después de esa aprobación.
 
 ---
 
-## 0. Preparación (solo Henry, una vez)
+## 0. Preparación (Henry, una vez)
 
-1. Agregar a los tres integrantes como colaboradores: GitHub → *Settings* → *Collaborators* → *Add people* (`Itsuna18`, `SalyC15`, `carlitosgiovanniramos`). Cada uno acepta la invitación desde su correo.
-2. Subir las cuatro ramas (en PowerShell, dentro de la carpeta `APE5`):
+1. *Settings* → *Collaborators* → *Add people*: `SalyC15`, `Itsuna18`, `carlitosgiovanniramos`. Cada uno acepta la invitación desde su correo.
+2. Subir las ramas (PowerShell, dentro de `APE5`), cuando el grupo lo decida:
 
 ```powershell
-git checkout main
-git push origin main
-git push -u origin plan-clases prototipo-html interfaz-responsive pruebas-informe
+git push origin plan-clases prototipo-html interfaz-responsive pruebas-informe --force-with-lease
 ```
 
-> Si un integrante prefiere subir su rama desde su propio equipo, usa los comandos de la sección «Comandos» de su apartado.
+> Se usa `--force-with-lease` porque estas ramas ya existían en GitHub con el contenido de la primera ronda (ya fusionada en `main`).
 
 ---
 
-## Integrante 1 · Henry Daniel Lagua Flores (@Hlagua) · `plan-clases`
+## Integrante 1 · Henry (@Hlagua) · `plan-clases`
 
-### Issue #1 (texto exacto)
-
-**Título:** `Fase 2 · Planificación, README y diapositivas de la defensa`
+**Issue — título:** `APE 5 CaféU · Planificación, README y diapositivas`
 
 ```markdown
 ## Objetivo
-Coordinar la fase 2 del APE 5 (Grupo 5): planificación de la sesión de 120 min, README actualizado y diapositivas para la defensa ante G3.
+Reorientar el APE 5 al proyecto del grupo, CaféU (APE 4): planificación, README y diapositivas de la defensa.
 
 ## Tareas
-- [ ] `docs/plan.md`: hipótesis, criterio de refutación, agenda, reparto de ramas y oradores.
-- [ ] `docs/github.md`: textos de Issues, PRs y revisiones de los 4 integrantes.
-- [ ] `README.md`: estructura del repositorio, cómo ejecutar el prototipo y entregables de la fase 2.
-- [ ] `presentacion/index.html`: diapositivas navegables con teclado.
-- [ ] `.gitignore`: excluir temporales y la carpeta de materiales `fase2/`.
+- [ ] `docs/plan.md`: hipótesis de CaféU, criterio de refutación, agenda y reparto de ramas.
+- [ ] `docs/github.md`: textos de Issues, PRs y revisiones de la ronda CaféU.
+- [ ] `README.md`: CaféU como proyecto, estructura y cómo ejecutar.
+- [ ] `presentacion/index.html`: diapositivas de CaféU navegables con teclado.
 
 ## Criterio de aceptación
-- La presentación se recorre con ← → y no tiene desborde horizontal a 360 px.
-- El README enlaza `resultados/`, `evidencias/` y `docs/`.
+- Ningún documento presenta otro proyecto como el del grupo.
+- La presentación no desborda a 360 px.
 
 Responsable: @Hlagua · Revisa: @SalyC15
 ```
 
-### Comandos (si se trabaja desde cero)
+**PR — título:** `docs(plan): APE 5 sobre CaféU — planificación, README y diapositivas` · **Descripción:** `Closes #9` + lista de archivos anteriores.
 
-```powershell
-git checkout main; git pull
-git checkout -b plan-clases
-git add README.md .gitignore docs/plan.md docs/github.md presentacion/
-git commit -m "docs(plan): planificación de la fase 2, README, plan de GitHub y diapositivas de defensa (#1)"
-git push -u origin plan-clases
-```
-
-### Pull Request #5
-
-**Título:** `docs(plan): planificación, README y diapositivas de la fase 2`
-
+**Revisión de Melany (Approve):**
 ```markdown
-Closes #1
-
-## Qué incluye
-- `docs/plan.md`: hipótesis falsable, agenda de 120 min, reparto de ramas sin conflictos y oradores.
-- `docs/github.md`: textos de Issues, comandos, PRs y revisiones.
-- `README.md` actualizado para la fase 2.
-- `presentacion/index.html`: 10 diapositivas (← → para navegar, N para notas).
-
-## Cómo revisar
-Abrir `presentacion/index.html` a 360 px y a 1366 px en DevTools y recorrerla con el teclado.
-```
-
-**Revisor:** @SalyC15
-
-### Texto de revisión que pega Melany al aprobar
-
-```markdown
-Revisé el PR #5 (plan-clases).
-- `docs/plan.md`: la hipótesis tiene un criterio de refutación medible (scrollWidth > innerWidth) y la agenda cubre los 120 min.
-- El reparto de archivos por rama no se superpone, así que no habrá conflictos al fusionar.
-- `presentacion/index.html`: la recorrí con ← y →; a 360 px no hay scroll horizontal.
-Aprobado ✅ — @SalyC15
+Revisé el PR (plan-clases). La hipótesis de `docs/plan.md` es de CaféU («dice su número de pedido y si pagó») y tiene un criterio de refutación medible. Recorrí `presentacion/index.html` con ← y → a 360 px: sin scroll horizontal. Aprobado ✅ — @SalyC15
 ```
 
 ---
 
-## Integrante 2 · Melany Saleth Cevallos Goyes (@SalyC15) · `prototipo-html`
+## Integrante 2 · Melany (@SalyC15) · `prototipo-html`
 
-### Issue #2 (texto exacto)
-
-**Título:** `Fase 2 · Boceto A de referencia y ficha de aplicación actualizada`
+**Issue — título:** `APE 5 CaféU · Boceto A de «Mi pedido» y ficha de aplicación`
 
 ```markdown
 ## Objetivo
-Dejar en el repositorio el boceto A (versión de escritorio de 960 px) como línea base, y completar la ficha de aplicación con los campos de la guía.
+Crear el boceto A de escritorio (960 px) de la pantalla «Mi pedido» de CaféU y la ficha de aplicación.
 
 ## Tareas
-- [ ] `prototipos/prototipo-A.html`: boceto original sin modificar.
-- [ ] `docs/proyecto.md`: diagnóstico del desborde a 360 px (+600 px) y de la escala 0,375 en emulación móvil.
-- [ ] Ficha: Actor, Tarea principal, Dato clave, Acción principal, Resultado visible y Mecanismo para corregir o cancelar.
-- [ ] Regla de interacción (sin duplicados) y criterio de aceptación medible.
+- [ ] `prototipos/prototipo-A.html`: «Mi pedido» con ancho fijo de 960 px y estado en la columna derecha.
+- [ ] `docs/proyecto.md`: diagnóstico (+600 px a 360 px; escala 0,375 en emulación móvil), ficha con los 6 campos, requisito RF-PED-01 y regla de cobro único con criterio medible.
 
 ## Criterio de aceptación
-- La ficha tiene los 6 campos para el proyecto (Usability Test Dashboard) y para el caso de clase.
-- El criterio de aceptación incluye un número verificable (por ejemplo, 0 duplicados en 5 de 5 intentos).
+- `document.documentElement.scrollWidth` del boceto A a 360 px = 960.
+- La ficha usa los datos del APE 4 (total $4.25, #A24, Edificio central, 10 min).
 
 Responsable: @SalyC15 · Revisa: @Itsuna18
 ```
 
-### Comandos (si se trabaja desde cero)
+**PR — título:** `docs(prototipo): boceto A de «Mi pedido» y ficha de aplicación de CaféU` · **Descripción:** `Closes #10`.
 
-```powershell
-git checkout main; git pull
-git checkout -b prototipo-html
-git add prototipos/prototipo-A.html docs/proyecto.md
-git commit -m "docs(prototipo): boceto A de referencia y ficha de aplicación con resultado visible y mecanismo de corrección (#2)"
-git push -u origin prototipo-html
-```
-
-### Pull Request #6
-
-**Título:** `docs(prototipo): boceto A de referencia y ficha de aplicación completa`
-
+**Revisión de Alison (Approve):**
 ```markdown
-Closes #2
-
-## Qué incluye
-- `prototipos/prototipo-A.html`: boceto de 960 px usado como línea base en las mediciones.
-- `docs/proyecto.md`: diagnóstico a 360 px (desborde de +600 px o, en emulación móvil, escala 0,375 con texto efectivo de 6,8 px).
-- Ficha con los 6 campos de la guía y la regla de no duplicados con criterio medible.
-
-## Cómo revisar
-Abrir `prototipos/prototipo-A.html` a 360 px y ejecutar en consola `document.documentElement.scrollWidth` (debe dar 960).
-```
-
-**Revisor:** @Itsuna18
-
-### Texto de revisión que pega Alison al aprobar
-
-```markdown
-Revisé el PR #6 (prototipo-html).
-- Abrí `prototipos/prototipo-A.html` a 360 px: scrollWidth = 960, así que el diagnóstico de +600 px es reproducible.
-- La ficha tiene los 6 campos y el «Mecanismo para corregir o cancelar» coincide con el botón «Cancelar mi reserva» del código.
-- El criterio de aceptación es medible (0 duplicados en 5 de 5 intentos).
-Aprobado ✅ — @Itsuna18
+Revisé el PR (prototipo-html). Abrí `prototipos/prototipo-A.html` a 360 px: scrollWidth = 960 y el panel de estado empieza en x = 600. La ficha tiene los 6 campos con los datos de CaféU del APE 4, y la regla de cobro único coincide con `PedidoAPI.confirmarPedido()`. Aprobado ✅ — @Itsuna18
 ```
 
 ---
 
-## Integrante 3 · Alison Marcela Cobos Taco (@Itsuna18) · `interfaz-responsive`
+## Integrante 3 · Alison (@Itsuna18) · `interfaz-responsive`
 
-### Issue #3 (texto exacto)
-
-**Título:** `Fase 2 · Controlador interaccion.js, CSS Mobile-First y respuestas de defensa`
+**Issue — título:** `APE 5 CaféU · «Mi pedido» adaptable, cobro único y defensa`
 
 ```markdown
 ## Objetivo
-Dejar la interfaz B lista para la defensa: controlador con el nombre que pide la guía, prevención de la doble pulsación y respuestas preparadas para G3.
+Construir la versión B de «Mi pedido» de CaféU: HTML5 semántico, CSS Mobile-First (48rem) e interacción con cobro único, y preparar la defensa.
 
 ## Tareas
-- [ ] Renombrar `src/reserva.js` → `src/interaccion.js` y actualizar `src/index.html`.
-- [ ] Corregir el hallazgo H-01: un doble Enter reservaba y cancelaba al instante (margen de 600 ms en «Cancelar»).
-- [ ] `src/estilos.css`: respetar `prefers-reduced-motion`.
-- [ ] `tests/test_runner.html`: adaptar TC-07 al margen de 600 ms, agregar TC-09 (doble Enter) y reiniciar `sessionStorage` antes de ejecutar.
-- [ ] `docs/preguntas.md`: respuestas a la pregunta 1 (48rem y Tab), la pregunta 2 (disabled y foco) y la objeción (ajuste frente a comprensión), con espacio para el acta.
+- [ ] `src/index.html`: header, main, article con <dl> (total, retiro, pago), section con <p role="status">.
+- [ ] `src/estilos.css`: 1 columna base, 2 desde 48rem, botones de 44 px, :focus-visible, paleta CaféU.
+- [ ] `src/api.js`: PedidoAPI (confirmarPedido, cancelarPedido, reiniciar) sin doble cobro.
+- [ ] `src/interaccion.js`: pendiente → confirmado → cancelado, disabled, .focus() y margen de 600 ms (H-01).
+- [ ] `tests/test_runner.html`: 10 pruebas.
+- [ ] `docs/preguntas.md`: respuestas preparadas y acta para la defensa ante G3.
 
 ## Criterio de aceptación
-- Tab → Enter → Enter deja la reserva confirmada (11 cupos) y el foco en «Cancelar».
-- Enter sobre «Cancelar» después de 1 s cancela y devuelve el foco a «Reservar».
-- 0 px de desborde a 320, 360, 768 y 1366 px.
+- Tab → Enter Enter: pedido #A24 pagado, saldo $5.75, foco en «Cancelar pedido».
+- Cancelar 1 s después: saldo $10.00, foco en «Confirmar y pagar».
+- Suite: 10 de 10.
 
 Responsable: @Itsuna18 · Revisa: @carlitosgiovanniramos
 ```
 
-### Comandos (si se trabaja desde cero)
+**PR — título:** `feat(cafeu): «Mi pedido» adaptable con cobro único, foco accesible y respuestas de defensa` · **Descripción:** `Closes #11`.
 
-```powershell
-git checkout main; git pull
-git checkout -b interfaz-responsive
-git mv src/reserva.js src/interaccion.js
-# editar src/index.html: <script src="interaccion.js" defer></script>
-git add src/interaccion.js src/index.html src/estilos.css tests/test_runner.html docs/preguntas.md
-git commit -m "feat(interaccion): controlador interaccion.js con prevención de doble pulsación, reduced-motion y respuestas de defensa (#3)"
-git push -u origin interfaz-responsive
-```
-
-### Pull Request #7
-
-**Título:** `feat(interaccion): interaccion.js, prevención de doble Enter y respuestas de defensa`
-
+**Revisión de Carlos (Approve):**
 ```markdown
-Closes #3
-
-## Qué incluye
-- `src/reserva.js` → `src/interaccion.js` (nombre que pide la guía) y `src/index.html` actualizado.
-- Corrección H-01: antes, Tab → Enter Enter terminaba en «cancelada» con 12 cupos; ahora termina en «confirmada» con 11. Se mantiene `btnCancelar.focus()`.
-- `src/estilos.css`: `@media (prefers-reduced-motion: reduce)`.
-- `tests/test_runner.html`: 9 de 9 pruebas aprobadas (nueva TC-09 para el doble Enter).
-- `docs/preguntas.md`: respuestas preparadas y acta para completar durante la defensa con G3.
-
-## Cómo revisar
-DevTools a 360 px → Tab → Enter Enter → la reserva sigue confirmada. Esperar 1 s → Enter → se cancela y el foco vuelve a «Reservar un lugar».
-```
-
-**Revisor:** @carlitosgiovanniramos
-
-### Texto de revisión que pega Carlos al aprobar
-
-```markdown
-Revisé el PR #7 (interfaz-responsive).
-- Probé Tab → Enter Enter a 360 px: la reserva queda confirmada (11 cupos) y el foco en «Cancelar mi reserva». H-01 corregido.
-- Enter sobre «Cancelar» después de 1 s: cancela, cupos 12, foco en «Reservar un lugar».
-- La media query sigue en 48rem y no se usa `order`: el orden de Tab es igual al del DOM en 360 y 1366 px.
-- `tests/test_runner.html` da 9 de 9 aprobadas.
-- Las respuestas de `docs/preguntas.md` citan archivos y mediciones reales.
-Aprobado ✅ — @carlitosgiovanniramos
+Revisé el PR (interfaz-responsive). Tab → Enter Enter a 360 px: pedido #A24 pagado, saldo $5.75 y foco en «Cancelar pedido»; un segundo cobro no ocurre. Cancelar después de 1 s devuelve $4.25 y el foco vuelve a «Confirmar y pagar». `tests/test_runner.html`: 10 de 10. La media query está en 48rem y no se usa `order`. Aprobado ✅ — @carlitosgiovanniramos
 ```
 
 ---
 
-## Integrante 4 · Carlos Giovanni Ramos Jácome (@carlitosgiovanniramos) · `pruebas-informe`
+## Integrante 4 · Carlos (@carlitosgiovanniramos) · `pruebas-informe`
 
-### Issue #4 (texto exacto)
-
-**Título:** `Fase 2 · Pruebas en 4 viewports, observación con usuarios, conclusiones e informe final`
+**Issue — título:** `APE 5 CaféU · Pruebas en 4 viewports, observación, conclusiones e informe`
 
 ```markdown
 ## Objetivo
-Validar técnicamente la interfaz B, registrar la observación con compañeros y entregar el informe final UTA.
+Validar técnicamente «Mi pedido» de CaféU, registrar la observación con compañeros y entregar el informe final UTA.
 
 ## Tareas
-- [ ] `resultados/pruebas.md`: scrollWidth e innerWidth a 320, 360, 768 y 1366 px (versión B y boceto A), teclado y foco.
-- [ ] `evidencias/`: capturas de cada viewport con la medición impresa.
-- [ ] `resultados/checklist.md`: consigna neutral y tabla de observación (tiempo, errores, ayudas y dificultades).
-- [ ] `docs/conclusiones.md`: requisito, decisión, dato observado, limitación y siguiente iteración.
-- [ ] `06_documento/APE5_Fase2_Informe_Final.pdf`: informe UTA con capturas, mediciones y acta de defensa.
+- [ ] `resultados/pruebas.md` y `evidencias/`: scrollWidth/innerWidth en 320, 360, 768 y 1366 px (B y boceto A), teclado, H-01 y suite.
+- [ ] `resultados/checklist.md`: consigna neutral y tabla de observación **con datos reales**.
+- [ ] `docs/protocolo_pruebas.md` y `docs/conclusiones.md`.
+- [ ] `06_documento/APE5_Fase2_Informe_Final.pdf` y documento corto de la fase 1 de CaféU.
 
 ## Criterio de aceptación
 - La versión B tiene 0 px de desborde en los 4 viewports.
-- La tabla de observación tiene solo datos reales de la sesión.
+- La tabla de observación solo contiene datos de la sesión.
 
 Responsable: @carlitosgiovanniramos · Revisa: @Hlagua
 ```
 
-### Comandos (si se trabaja desde cero)
+**PR — título:** `test(cafeu): validación en 4 viewports, observación, conclusiones e informe final` · **Descripción:** `Closes #12`.
 
-```powershell
-git checkout main; git pull
-git checkout -b pruebas-informe
-python -m http.server 8766          # en otra ventana, dentro de APE5
-python _scripts/ape5_fase2_evidencias.py
-python _scripts/ape5_fase2_build.py
-git add evidencias/ resultados/ docs/conclusiones.md _scripts/ape5_fase2_evidencias.py _scripts/ape5_fase2_build.py 06_documento/APE5_Fase2_*
-git commit -m "test(pruebas): validación en 4 viewports, observación en aula, conclusiones e informe final UTA (#4)"
-git push -u origin pruebas-informe
-```
-
-### Pull Request #8
-
-**Título:** `test(pruebas): validación responsiva, observación con usuarios e informe final`
-
+**Revisión de Henry (Approve):**
 ```markdown
-Closes #4
-
-## Qué incluye
-- `resultados/pruebas.md`: versión B con 0 px de desborde a 320, 360, 768 y 1366 px; boceto A con +640, +600 y +192 px.
-- `evidencias/`: 10 capturas con scrollWidth e innerWidth impresos.
-- `resultados/checklist.md`: protocolo de observación con consigna neutral.
-- `docs/conclusiones.md` y el informe final UTA en `06_documento/`.
-
-## Cómo revisar
-Repetir una medición: DevTools a 320 × 720 → consola → `document.documentElement.scrollWidth` debe dar 320.
-```
-
-**Revisor:** @Hlagua
-
-### Texto de revisión que pega Henry al aprobar
-
-```markdown
-Revisé el PR #8 (pruebas-informe).
-- Repetí la medición a 320 × 720 y a 1366 × 768: scrollWidth = innerWidth en ambos casos, igual que en `resultados/pruebas.md`.
-- Las capturas de `evidencias/` corresponden a los viewports de la tabla.
-- `docs/conclusiones.md` distingue la evidencia técnica de la evidencia con personas y declara sus limitaciones.
-- El informe final incluye capturas, mediciones y el acta de defensa.
-Aprobado ✅ — @Hlagua
+Revisé el PR (pruebas-informe). Repetí la medición a 320 × 720 y 1366 × 768: scrollWidth = innerWidth, como en `resultados/pruebas.md`. Las capturas de `evidencias/` coinciden con la tabla. La observación y las conclusiones distinguen la evidencia técnica de la evidencia con personas. Aprobado ✅ — @Hlagua
 ```
 
 ---
 
-## Cierre (cualquier integrante con permisos)
+## Cierre
 
-Fusionar en este orden (no hay conflictos, pero así el historial queda legible): #5 → #6 → #7 → #8. Usar *Create a merge commit* para que cada rama quede visible en el historial de `main`.
+Fusionar en orden #13 → #14 → #15 → #16 con *Create a merge commit*, **solo después de la aprobación del revisor**. Luego:
 
 ```powershell
 git checkout main; git pull
