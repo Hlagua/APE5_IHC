@@ -1,196 +1,72 @@
-# APE 5 · Fase 1 · Del boceto a la interfaz web adaptable
-## Ficha de aplicación al proyecto y diagnóstico de interacción
+# APE 5 · Diagnóstico y ficha de aplicación · CaféU
 
 - **Institución:** Universidad Técnica de Ambato (UTA) · FISEI · Ingeniería de Software
-- **Asignatura:** Interacción Humano-Computador · Quinto Semestre "A"
-- **Docente:** Ing. Mg. José Caiza
+- **Asignatura:** Interacción Humano-Computador · Quinto "A" · **Docente:** Ing. Mg. José Caiza
 - **Grupo:** 5 · **Repositorio:** https://github.com/Hlagua/APE5_IHC
+- **Proyecto del grupo:** **CaféU**, la aplicación de pedidos de la cafetería universitaria trabajada en el APE 4 ([Hlagua/APE4_IHC](https://github.com/Hlagua/APE4_IHC)).
+- **Pantalla transformada:** «Mi pedido → Confirmar y pagar» (W4 Resumen del APE 4) → `src/`
 - **Responsable de la ficha:** Melany Saleth Cevallos Goyes (@SalyC15) · rama `prototipo-html` · Issue #2 · **Revisión cruzada:** Alison Marcela Cobos Taco (@Itsuna18)
-- **Proyecto del equipo:** Usability Test Dashboard 2.0 (UTA · IHC)
-- **Pantalla elegida del proyecto:** Bitácora de observaciones — ruta `/dashboard/test-plan/record` (`src/presentation/pages/ObservationRecordPage.tsx`)
-- **Pantalla adaptada en clase:** Boceto A «Elige tu taller» (Caso Aula Abierta) → `src/`
 
 ---
 
-### Integrantes y asignación de roles
+## 1. De dónde viene la pantalla
 
-| Integrante | Usuario GitHub | Correo institucional / contacto | Rol oficial en el proyecto |
-|---|---|---|---|
-| **Alison Marcela Cobos Taco** | [@Itsuna18](https://github.com/Itsuna18) | `tacomarcelab@gmail.com` | **Desarrollador Back-End** (API, modelos, persistencia, endpoints) |
-| **Melany Saleth Cevallos Goyes** | [@SalyC15](https://github.com/SalyC15) | `mcevallos8901@uta.edu.ec` | **Desarrollador Front-End** (Vistas, componentes UI, diseño, wizard) |
-| **Carlos Giovanni Ramos Jácome** | [@carlitosgiovanniramos](https://github.com/carlitosgiovanniramos) | `carlos.giovanni.ramos.work@gmail.com` | **Tester** (Protocolos de validación, casos de prueba, métricas SUS) |
-| **Henry Daniel Lagua Flores** | [@Hlagua](https://github.com/Hlagua) | `hlagua6116@uta.edu.ec` | **QA / Arquitecto** (Auditorías, motor IA, resiliencia, suite de tests) |
+En el APE 4, CaféU se diseñó y probó como prototipo **móvil** (v1 → v3.1): wireframes, Figma y un prototipo HTML con un marco de teléfono fijo. El APE 5 pide llevar una pantalla a una **interfaz web real y adaptable**, que funcione igual en un teléfono y en un computador. Elegimos «Mi pedido» porque es el punto donde el estudiante decide pagar, y donde el APE 4 detectó el mayor riesgo para el usuario: **el temor a pagar dos veces** (problema D1, H9).
 
----
+| Dato | Valor (del prototipo CaféU v3.1) |
+| :--- | :--- |
+| Productos | 1 × Café Americano 12 oz ($1.50) · 1 × Sánduche de jamón y queso ($2.75) |
+| Total | $4.25 |
+| Retiro | Edificio central · listo en unos 10 minutos |
+| Pago | Tarjeta universitaria |
+| Número de pedido | #A24 |
 
-## 1. Diagnóstico del Boceto A (360 px)
+## 2. Diagnóstico del boceto A (versión de escritorio de 960 px)
 
-Al abrir el **Boceto A inicial** (`prototipo-A.html`) en un viewport móvil estrecho de **360 px de ancho** (representativo de dispositivos móviles estándar como Galaxy A o iPhone SE), se diagnosticaron las siguientes fallas críticas de diseño e interacción:
+`prototipos/prototipo-A.html` es la misma pantalla como boceto de escritorio: `body { width: 960px }` y una cuadrícula fija de `580px 360px`. A la izquierda está el pedido y el botón «Confirmar y pagar»; a la derecha, el panel «Estado del pedido».
 
-1. **Desbordamiento horizontal severo (Overflow):**
-   - El boceto original utilizaba un contenedor rígido de escritorio `body { width: 960px; }` con una cuadrícula fija de `grid-template-columns: 580px 360px;`.
-   - Al renderizarse en un viewport de 360 px, el ancho total renderizado (`scrollWidth`) es de 960 px, generando **600 px de desborde horizontal** (`scrollWidth - clientWidth = 600px`).
-2. **Pérdida visual de información y del panel de estado:**
-   - La columna derecha que aloja el panel de estado **«Mi reserva»** (`<section class="resumen">`) y los controles de interacción quedan completamente ocultos fuera del área visible de la pantalla (a partir de $x > 580\text{ px}$).
-   - La persona usuaria que interactúa desde un teléfono móvil **no puede ver su reserva ni confirmar si su acción tuvo efecto**, a menos que realice un paneo horizontal manual forzado.
-3. **En un teléfono real el fallo cambia de forma, pero persiste:**
-   - Con la emulación de dispositivo móvil de Chromium (meta viewport activo), el navegador no muestra el desborde. Amplía el viewport de diseño a 960 px y **aleja toda la página** (`visualViewport.scale = 0,375`).
-   - El texto de 18 px se ve con un tamaño efectivo de **6,8 px**. «Mi reserva» queda en pantalla, pero ilegible sin hacer zoom con los dedos. En los dos modos, la persona no puede leer el estado de su reserva a simple vista (medición en `resultados/pruebas.md`, sección 3; archivo base en `prototipos/prototipo-A.html`).
-4. **Violación de principios HCI y estándares de accesibilidad:**
-   - **Heurística de Nielsen H1 (Visibilidad del estado del sistema):** El sistema oculta la confirmación y la retroalimentación inmediata de la acción.
-   - **WCAG 2.1 Criterio de Éxito 1.4.10 (Reajuste / Reflow - Nivel AA):** El contenido debe presentarse sin pérdida de información ni funcionalidad y sin requerir desplazamiento bidimensional (horizontal y vertical).
-   - **Control de usuario ausente:** El botón principal venía bloqueado (`disabled`) en el código base, no existía canal de comunicación para lectores de pantalla (`role="status"` ausente) y no se ofrecía la posibilidad de deshacer (cancelar) la reserva.
+1. **Desborde horizontal:** a 360 px, `document.documentElement.scrollWidth = 960` frente a `innerWidth = 360`, es decir, **+600 px**. A 320 px son +640 px y a 768 px, +192 px (`resultados/pruebas.md`).
+2. **Se pierde la información crítica:** el panel «Estado del pedido» empieza en x = 600 px, fuera de la pantalla del teléfono. El estudiante paga y **no ve si el pago se hizo**, justo el temor de doble cobro que encontramos en el APE 4.
+3. **En un teléfono el fallo cambia de forma, pero persiste:** con emulación de dispositivo móvil, Chromium no muestra la barra horizontal. Lo que hace es alejar toda la página (`visualViewport.scale = 0,375`), y el texto de 18 px se ve de **6,75 px**. El estado «cabe», pero no se puede leer.
+4. **Sin control ni anuncio:** el botón del boceto está deshabilitado, no existe `role="status"` y no hay forma de cancelar.
 
----
+Principios afectados: **H1** Visibilidad del estado del sistema, **H9** Recuperarse de errores, **WCAG 1.4.10** Reajuste, **WCAG 4.1.3** Mensajes de estado.
 
-## 2. Ficha de aplicación al proyecto
+## 3. Ficha de aplicación
 
-### Ficha según la guía de la fase 2
+| Campo | CaféU · «Mi pedido» |
+| :--- | :--- |
+| **Actor** | Estudiante universitario con poco tiempo entre clases que pide desde el celular |
+| **Tarea principal** | Confirmar y pagar su pedido para retirarlo sin hacer fila |
+| **Dato clave que decide la acción** | Productos, **total ($4.25)**, lugar y tiempo de retiro (Edificio central, 10 min) y medio de pago con su saldo (`<dl>`) |
+| **Acción principal** | Botón «Confirmar y pagar · $4.25» |
+| **Resultado visible** | En `<p role="status">`: «Pedido **#A24** confirmado y pagado ($4.25). Estará listo en unos 10 minutos en el Edificio central.» El panel se pone verde, el saldo baja de $10.00 a $5.75 y el botón cambia a «Pedido #A24 pagado» (deshabilitado) |
+| **Mecanismo para corregir o cancelar** | Antes de pagar: «Editar» el pedido (pantalla W5 del APE 4). Después de pagar: botón **«Cancelar pedido»**, que devuelve los $4.25 a la tarjeta y deja confirmar de nuevo |
 
-| Campo | Proyecto: Usability Test Dashboard 2.0 (Bitácora de observaciones) | Caso de clase: Aula Abierta (Elige tu taller) |
+**Requisito (RF-PED-01):** el estudiante debe poder confirmar y pagar su pedido una sola vez, ver de inmediato el número de pedido y cuándo retirarlo, y cancelarlo con devolución si se equivocó.
+
+## 4. Regla de interacción y criterio de aceptación
+
+- **Regla:** **un pedido se cobra una sola vez.** Al confirmar, «Confirmar y pagar» queda `disabled`, el controlador ignora nuevas confirmaciones y `PedidoAPI.confirmarPedido()` rechaza el segundo cobro (`src/interaccion.js`, `src/api.js`).
+- **Criterios de aceptación medibles:**
+  - Con el pedido pagado (saldo $5.75), **5 intentos** de activar «Confirmar y pagar» dejan el saldo en **$5.75**: 0 cobros duplicados en 5 de 5.
+  - Un **doble Enter** (dos pulsaciones en menos de 600 ms) deja el pedido **confirmado**: 0 cancelaciones accidentales.
+  - Tras confirmar, el foco queda en «Cancelar pedido»; tras cancelar, en «Confirmar y pagar».
+  - Cancelar devuelve exactamente $4.25 (saldo de $5.75 a $10.00).
+
+## 5. Decisiones HCI
+
+| Decisión | Principio | Justificación |
 | :--- | :--- | :--- |
-| **Actor** | Moderador/a de la prueba de usabilidad | Estudiante |
-| **Tarea principal** | Registrar el desempeño de un participante en una tarea (T1…Tn) | Reservar un lugar en un taller |
-| **Dato clave que decide la acción** | Éxito (Sí/No), tiempo en segundos y número de errores | Horario, lugar y cupos disponibles (`<dl>`) |
-| **Acción principal** | «Agregar al backlog» | «Reservar un lugar» |
-| **Resultado visible** | Mensaje en `<p role="status">` que confirma que el hallazgo se agregó al backlog (o `role="alert"` si falla) | «Reserva confirmada: …» en `<p role="status">`, resumen en verde, cupos 12 → 11 y botón «Ya tienes un lugar» deshabilitado |
-| **Mecanismo para corregir o cancelar** | Editar la fila antes de enviarla; los valores fuera de rango se corrigen solos (errores < 0 → 0; tiempo < 1 → 1) | Botón «Cancelar mi reserva»: restituye el cupo (11 → 12) y devuelve el foco a «Reservar un lugar» |
+| Una columna en móvil y dos desde 48rem, sin reordenar el DOM | H1 · WCAG 1.4.10 · 1.3.2 | En el boceto A el estado quedaba a 600 px a la derecha; ahora aparece justo debajo del botón de pagar. |
+| Total, retiro y pago en un `<dl>` antes del botón | Jerarquía · H6 | El estudiante ve cuánto paga y con qué antes de comprometer su dinero. |
+| `disabled` + texto «Pedido #A24 pagado» | H5 Prevención de errores | Responde al temor de doble cobro del APE 4 (D1). |
+| «Cancelar pedido» con devolución visible | H3 Control · H9 | Deshacer sin salir de la pantalla y ver el saldo restituido. |
+| `role="status"` con número, total y tiempo | H1 · WCAG 4.1.3 | El lector de pantalla anuncia el resultado sin mover el foco. |
+| `.focus()` al siguiente control y margen de 600 ms | WCAG 2.4.3 · H5 | El foco nunca queda en un botón deshabilitado u oculto, y un doble Enter no cancela el pago (H-01). |
 
-### Regla de interacción y criterio de aceptación
+## 6. Hipótesis para la validación
 
-- **Regla:** impedir envíos duplicados. Mientras la reserva esté confirmada, «Reservar un lugar» queda `disabled` y el controlador ignora cualquier nueva confirmación (`src/interaccion.js` y `ReservaAPI.confirmarReserva()` en `src/api.js`).
-- **Criterio de aceptación medible:**
-  - Con la reserva confirmada (11 cupos), **5 intentos** de activar «Reservar un lugar» (clic o `click()` en consola) dejan **11 cupos**: 0 duplicados en 5 de 5 intentos.
-  - Un doble Enter (dos pulsaciones en menos de 600 ms) deja la reserva **confirmada**: 0 cancelaciones accidentales.
-  - Tras confirmar, el foco queda en «Cancelar mi reserva»; tras cancelar, en «Reservar un lugar».
-  - Verificado en `resultados/pruebas.md`, secciones 4 y 5.
+> En un viewport de 360 px, un estudiante que no conoce la pantalla confirma su pedido y **dice su número de pedido y si ya pagó sin buscarlo y sin pedir ayuda**.
 
-### Secuencia detallada
-
-Se completó la secuencia formal **Actor → Tarea → Dato decisivo → Acción principal → Estado final** tanto para la pantalla del proyecto grupal como para el caso trabajado en clase:
-
-### Secuencia de la tarea
-
-| Actor | Tarea | Dato decisivo | Acción principal | Estado final |
-| :--- | :--- | :--- | :--- | :--- |
-| **Moderador/a de la prueba** *(Proyecto: Usability Test Dashboard)* | Registrar el desempeño de un participante en una tarea específica (T1…Tn) | Éxito (Sí/No), tiempo transcurrido en segundos ($t \ge 1\text{ s}$) y número de errores ($e \ge 0$) | Pulsar el botón **«Agregar al backlog»** | Hallazgo registrado en el Product Backlog y confirmado mediante alerta accesible en `<p role="status">` |
-| **Estudiante** *(Caso de clase: Aula Abierta)* | Reservar un taller extracurricular | Horario del taller, laboratorio/lugar y cupos disponibles ($c > 0$) | Pulsar el botón **«Reservar un lugar»** | Estado «Reserva confirmada» visible de inmediato en «Mi reserva», cupo decrementado en 1 y botón de cancelar habilitado |
-
-### Requisitos
-
-- **RF-OBS-01 (Proyecto):** El moderador debe registrar por cada participante y tarea el éxito, tiempo y errores observados, enviando el hallazgo al backlog con confirmación inequívoca del estado del envío.
-- **RF-RES-01 (Aula Abierta):** El estudiante debe consultar el horario y lugar del taller, confirmar su reserva descontando 1 cupo, y disponer de la opción de cancelar la reserva restituyendo dicho cupo.
-
----
-
-## 3. Reglas de negocio y criterios de aceptación medibles
-
-### A. Pantalla del proyecto (Usability Test Dashboard 2.0)
-- **Regla de negocio:** Las métricas de observación no pueden contener datos anómalos o negativos. El campo **número de errores** no puede ser negativo ($e \ge 0$) y el **tiempo transcurrido** debe ser de al menos 1 segundo ($t \ge 1$). Si el usuario ingresa valores fuera de rango, el controlador (`handleObsChange`) auto-corrige automáticamente: valores negativos de errores se normalizan a `0`, y tiempos menores a 1 se normalizan a `1`. El campo «Errores» es obligatorio.
-- **Criterio de aceptación (Medible en formato Gherkin):**
-  - *Dado* que el moderador ingresa `-3` en el campo «Errores», *cuando* desenfoca el campo (evento blur o submit), *entonces* el valor queda establecido automáticamente en `0`. **Tasa de cumplimiento exigida: 5 de 5 intentos (100 %)**.
-  - *Dado* que se ingresa `0` en el campo «Tiempo (s)», *cuando* se valida el formulario, *entonces* el valor se ajusta a `1`. **Tasa de cumplimiento exigida: 5 de 5 intentos (100 %)**.
-  - En la base de datos y backlog se registran **exactamente 0 observaciones** con errores negativos o tiempo menor a 1 segundo.
-
-### B. Pantalla adaptada en clase (Aula Abierta)
-- **Regla de negocio:** Una persona estudiante sólo puede reservar un cupo a la vez (idempotencia y unicidad). Al confirmarse la reserva, el botón «Reservar un lugar» queda deshabilitado (`disabled = true`) impidiendo transacciones duplicadas. El cupo se decrementa en exactamente 1 unidad. Al cancelar, el cupo se restituye en exactamente 1 unidad y el botón de reservar vuelve a quedar activo.
-- **Criterio de aceptación (Medible):**
-  - *Dado* un taller con 12 cupos disponibles, *cuando* el usuario hace clic en «Reservar un lugar», *entonces* los cupos bajan a 11, el estado cambia a «confirmada», el botón de reservar queda `disabled` y presionar Enter repetidas veces genera **0 reservas duplicadas adicionales**.
-  - *Dado* el estado confirmado, *cuando* el usuario presiona «Cancelar mi reserva», *entonces* los cupos vuelven a 12, el botón de cancelar se oculta y el foco vuelve automáticamente al botón de reserva.
-
----
-
-## 4. Estructura HTML5 semántica (`src/index.html`)
-
-La arquitectura del documento web se implementó sin dependencias externas, asegurando jerarquía y accesibilidad nativa:
-- `<header class="cabecera">`: Identidad institucional («Aula Abierta»), fuera del flujo de la tarea principal.
-- `<main class="contenido">`: Contenedor principal de la tarea con título de primer nivel `<h1>Elige tu taller</h1>`.
-- `<article class="tarjeta" aria-labelledby="titulo-taller">`: Unidad autónoma que agrupa los datos decisivos y la acción principal.
-- `<dl class="datos">`: Lista de definición con pares `<dt>` (Horario, Lugar, Cupos) y `<dd>`, garantizando que el usuario conozca las condiciones antes del llamado a la acción.
-- `<button type="button" id="btn-reservar">`: Control nativo interactivo con atributo semántico, accesible vía teclado con `Tab` y ejecutable con `Enter` / `Espacio`.
-- `<section class="resumen" aria-labelledby="titulo-resumen" data-estado="disponible">`: Región dedicada a la retroalimentación y reversibilidad.
-- `<p id="estado" role="status" aria-live="polite">`: Región viva accesible que notifica a tecnologías de asistencia (lectores de pantalla) sin alterar el flujo visual.
-- `<button type="button" id="btn-cancelar" hidden>`: Control secundario para deshacer la acción.
-
----
-
-## 5. Diseño CSS Mobile-First (`src/estilos.css`)
-
-El diseño responsivo sigue estrictamente la metodología **Mobile-First**:
-- **Columna única base (< 48rem):**
-  Por defecto, la cuadrícula `.disposicion` se declara con `display: grid; grid-template-columns: 1fr; gap: 1rem;`. En pantallas de 360 px, la tarjeta queda en la parte superior y el resumen «Mi reserva» se posiciona inmediatamente abajo, eliminando el scroll horizontal (`scrollWidth = 360px`).
-- **Punto de corte en 48rem (768 px):**
-  Mediante `@media (min-width: 48rem)`, la cuadrícula se expande a dos columnas proporcionales (`grid-template-columns: 3fr 2fr;`). 
-- **Preservación del orden del DOM:**
-  No se utiliza `order`, `flex-direction: column-reverse` ni flotados que alteren el orden de tabulación y lectura respecto al árbol semántico HTML.
-- **Ergonomía táctil y foco visible:**
-  Los botones tienen un `min-height: 2.75rem` (44 px) satisfaciendo WCAG 2.5.5 / 2.5.8 (Target Size), y cuentan con `:focus-visible` con anillo de contraste de 3 px en tono ámbar (`#ffbf47`).
-
----
-
-## 6. Estados de interacción y gestión de foco (`src/interaccion.js` y `src/api.js`)
-
-Se conectaron los tres momentos fundamentales del ciclo de vida de la reserva:
-1. **Momento 1 · Disponible (Inicial):**
-   - Estado: `data-estado="disponible"`.
-   - Mensaje: «Aún no tienes una reserva.».
-   - Cupos: 12 disponibles.
-   - Botón «Reservar»: Habilitado (`disabled = false`).
-   - Botón «Cancelar»: Oculto (`hidden = true`).
-2. **Momento 2 · Confirmada (Acción completada):**
-   - Estado: `data-estado="confirmada"` (resumen con fondo verde `#e6f4ea` y borde `#1e7b3a`).
-   - Mensaje anunciado: «Reserva confirmada: Interfaces web accesibles · jueves de 14:00 a 16:00 · Laboratorio 2.».
-   - Cupos: 11 disponibles.
-   - Botón «Reservar»: Bloqueado (`disabled = true`, texto «Ya tienes un lugar»).
-   - Botón «Cancelar»: Visible (`hidden = false`).
-   - **Gestión del foco:** Como el botón original queda deshabilitado, el foco de teclado se transfiere inmediatamente con `btnCancelar.focus()`, previniendo que el usuario quede atrapado en un elemento inactivo (WCAG 2.4.3).
-3. **Momento 3 · Cancelada (Acción deshecha):**
-   - Estado: `data-estado="cancelada"` (resumen con fondo de aviso `#fff4e0` y borde `#a35a00`).
-   - Mensaje anunciado: «Cancelaste tu reserva. El lugar vuelve a estar disponible.».
-   - Cupos: 12 restituidos.
-   - Botón «Reservar»: Re-habilitado (`disabled = false`).
-   - Botón «Cancelar»: Oculto (`hidden = true`).
-   - **Gestión del foco:** Al ocultarse el botón de cancelación, el foco vuelve automáticamente a `btnReservar.focus()`.
-
----
-
-## 7. Decisiones de diseño HCI justificadas
-
-| Decisión de diseño | Heurística / Principio | Justificación ergonómica y técnica |
-|---|---|---|
-| **Disposición en 1 columna en móvil y 2 columnas desde 48rem** | **Visibilidad del estado (H1)** · **WCAG 1.4.10 (Reajuste)** | En el boceto de 960 px, «Mi reserva» requería scroll horizontal de 600 px. En columna única, el estado se descubre naturalmente con scroll vertical natural. |
-| **Colocación del `<dl>` antes del `<button>`** | **Jerarquía de información** · **H6 Reconocimiento** | La persona toma una decisión informada (horario y lugar) antes de comprometer su cupo con la acción principal. |
-| **Inclusión del botón «Cancelar mi reserva»** | **Control y libertad del usuario (H3)** | Permite recuperarse de selecciones erróneas sin abandonar la pantalla y restituye el cupo inmediatamente. |
-| **`role="status"` en mensaje de estado** | **Visibilidad del sistema (H1)** · **WCAG 4.1.3 Mensajes de estado** | Permite que lectores de pantalla anuncien el resultado sin interrumpir abruptamente el cursor ni forzar recargas. |
-| **Desplazamiento programático de `.focus()`** | **Accesibilidad por teclado** · **WCAG 2.4.3 Orden del foco** | Evita la pérdida del foco cuando un control activo pasa a estar `disabled` u oculto en el árbol de accesibilidad. |
-
----
-
-## 8. Evidencias y capturas preliminares
-
-Las capturas de verificación se encuentran organizadas en la carpeta `04_capturas/`:
-- `boceto-A-360.png`: Diagnóstico del boceto A a 360 px evidenciando el corte horizontal y la pérdida de «Mi reserva».
-- `movil-360-disponible.png`: Prototipo adaptado a 360 px en estado inicial (1 columna fluida, sin scroll horizontal).
-- `movil-360-confirmada.png`: Prototipo a 360 px con reserva confirmada, retroalimentación visible y botón cancelar activo.
-- `movil-360-cancelada.png`: Prototipo a 360 px en estado cancelado con restitución de cupo.
-- `escritorio-768-confirmada.png`: Vista al punto de corte exacto de 48rem (768 px) en 2 columnas.
-- `escritorio-1366-confirmada.png`: Vista en pantalla completa de escritorio (1366 px) con layout equilibrado.
-
----
-
-## 9. Revisión entre pares e hipótesis para la Fase 2
-
-### Matriz de revisión entre pares
-
-| Tarea evaluada por revisor externo | Móvil (360 px) | Escritorio (1366 px) | Observación / Hallazgo |
-| :--- | :--- | :--- | :--- |
-| **1. Localizar el horario del taller** | Exitoso (< 2 s) | Exitoso (< 2 s) | La etiqueta `<dt>Horario</dt>` permite identificación inmediata en ambas resoluciones. |
-| **2. Reservar un lugar** | Exitoso (1 clic/Enter) | Exitoso (1 clic/Enter) | El botón responde al instante; el cambio de color a verde y el texto confirman el éxito. |
-| **3. Cancelar la reserva** | Exitoso (1 clic/Enter) | Exitoso (1 clic/Enter) | La acción se deshace limpiamente; el foco regresa al botón de reservar. |
-
-### Hipótesis para validación empírica en la Fase 2
-
-> **Hipótesis:** Al confirmar o cancelar la reserva exclusivamente mediante el teclado, una persona usuaria que dependa de un lector de pantalla (NVDA en Windows o TalkBack en Android) percibe con claridad el anuncio generado por la región `role="status"` y comprende que el foco se ha reubicado en la siguiente acción disponible, sin desorientarse ni experimentar trampas de teclado.
-
-**Criterio medible de validación:**
-La hipótesis se considerará formalmente validada en la Fase 2 si al menos **4 de 5 participantes (80 % o superior)** en las sesiones de prueba con lector de pantalla pueden repetir verbalmente el nuevo estado de su reserva de forma inmediata tras presionar Enter, sin requerir exploración manual adicional ni ayuda del moderador.
+Se considera validada si al menos **4 de 5** participantes lo logran. La prueba con lector de pantalla (NVDA o TalkBack) queda para la siguiente iteración.
