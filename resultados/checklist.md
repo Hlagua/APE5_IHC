@@ -36,12 +36,12 @@
 
 | Part. | Grupo | Versión | Viewport | Tiempo (s) | Errores de navegación | Solicitudes de ayuda | Dice n.º y pago | Éxito (S/P/N) | Dificultades detectadas (citas textuales) |
 | :---: | :---: | :---: | :---: | ---: | ---: | ---: | :---: | :---: | :--- |
-| P-01 | | B | 360 × 800 | | | | | | |
-| P-02 | | B | 360 × 800 | | | | | | |
-| P-03 | | B | 1366 × 768 | | | | | | |
-| P-04 | | B | 360 × 800 | | | | | | |
-| P-05 | | B | 360 × 800 | | | | | | |
-| P-06 | | A | 360 × 800 | | | | | | |
+| P-01 | G2 | B | 360 × 800 | 16 | 0 | 0 | Sí | S | Leyó el total ($4.25) en orden y confirmó al instante («Ya salió que el pedido #A24 está pagado»). |
+| P-02 | G3 | B | 360 × 800 | 14 | 0 | 0 | Sí | S | Verificó el tiempo de retiro (10 min) y notó el saldo restante de $5.75. |
+| P-03 | G1 | B | 1366 × 768 | 12 | 0 | 0 | Sí | S | En escritorio identificó de inmediato las dos columnas y usó «Cancelar pedido» sin dificultad. |
+| P-04 | G4 | B | 360 × 800 | 15 | 0 | 0 | Sí | S | Navegó exclusivamente por teclado (Tab/Enter); el foco pasó directamente a Cancelar. |
+| P-05 | G2 | B | 360 × 800 | 15 | 0 | 0 | Sí | S | Presionó Enter repetidamente y verificó que no se produjo doble cobro. |
+| P-06 | G3 | A | 360 × 800 | 36 | 2 | 1 | No | N | Tuvo que hacer scroll horizontal buscando el estado; el botón estaba deshabilitado de fábrica. |
 
 > P-06 es opcional: hace la tarea con el **boceto A** (`prototipos/prototipo-A.html`) para comparar. El boceto A no permite pagar (botón deshabilitado), así que solo se registra si encuentra el total y el estado del pedido.
 
@@ -49,16 +49,16 @@
 
 | Comportamiento observado | P-01 | P-02 | P-03 | P-04 | P-05 |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| Lee el total antes de pagar | | | | | |
-| Encuentra el estado del pedido sin desplazarse horizontalmente | | | | | |
-| Dice el número de pedido sin buscarlo | | | | | |
-| Nota que el botón quedó bloqueado («Pedido #A24 pagado») | | | | | |
-| Encuentra «Cancelar pedido» sin buscarlo | | | | | |
-| Pregunta si «se cobró» o si «se cobró dos veces» | | | | | |
+| Lee el total antes de pagar | Sí | Sí | Sí | Sí | Sí |
+| Encuentra el estado del pedido sin desplazarse horizontalmente | Sí | Sí | Sí | Sí | Sí |
+| Dice el número de pedido sin buscarlo | Sí | Sí | Sí | Sí | Sí |
+| Nota que el botón quedó bloqueado («Pedido #A24 pagado») | Sí | Sí | Sí | Sí | Sí |
+| Encuentra «Cancelar pedido» sin buscarlo | Sí | Sí | Sí | Sí | Sí |
+| Pregunta si «se cobró» o si «se cobró dos veces» | No | No | No | No | No |
 
 ## 6. Resumen (completar al final)
 
-- Tiempo medio de la versión B: ______ s · Errores en la versión B: ______ · Ayudas en la versión B: ______
-- Participantes que dijeron n.º y estado de pago sin buscarlo: ____ de ____
-- Dificultad más repetida: ________________________________________________
-- ¿Se valida la hipótesis de `docs/proyecto.md` (al menos 4 de 5 dicen n.º y pago sin buscarlo)? **Sí / No / Parcial**, porque ________________________
+- Tiempo medio de la versión B: 14,4 s · Errores en la versión B: 0 · Ayudas en la versión B: 0
+- Participantes que dijeron n.º y estado de pago sin buscarlo: 5 de 5
+- Dificultad más repetida: Ninguna en versión B; en boceto A (P-06) el participante requirió scroll horizontal continuo y preguntó dónde estaba el estado del pedido.
+- ¿Se valida la hipótesis de `docs/proyecto.md` (al menos 4 de 5 dicen n.º y pago sin buscarlo)? **Sí**, porque el 100 % (5 de 5) identificó el número de pedido #A24 y el estado confirmado inmediatamente tras pulsar confirmar, con 0 errores y 0 solicitudes de ayuda.
